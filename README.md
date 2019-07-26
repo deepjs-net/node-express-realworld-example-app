@@ -38,7 +38,8 @@
 ├── lib
 ├── logs
 ├── middlewares
-├── models
+├── models 对数据库操作的公共方法
+├── controller 封装的接口
 ├── routes
 ├── views
 └── index.js
