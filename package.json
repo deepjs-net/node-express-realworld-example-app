@@ -1,0 +1,23 @@
+{
+  "name": "n-blog",
+  "version": "1.0.0",
+  "description": "learn node & mongodb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepjs-net/N-blog.git"
+  },
+  "keywords": [
+    "node",
+    "mongodb"
+  ],
+  "author": "xiaohan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deepjs-net/N-blog/issues"
+  },
+  "homepage": "https://github.com/deepjs-net/N-blog#readme"
+}
