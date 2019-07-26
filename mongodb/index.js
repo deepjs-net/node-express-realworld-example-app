@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://ip:host/n_log', {
+const config = require('../config');
+mongoose.connect('mongodb://username:password@ip:port/n_log', {
   userMongoClient: true
 });
 
