@@ -1,23 +1,31 @@
 {
-  "name": "n-blog",
-  "version": "1.0.0",
-  "description": "learn node & mongodb",
+  "name": "@deepjs/n-blog",
+  "version": "0.0.1",
+  "description": "使用 Express + MongoDB 搭建多人博客",
   "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/deepjs-net/N-blog.git"
   },
   "keywords": [
-    "node",
+    "blog",
+    "express",
     "mongodb"
   ],
-  "author": "xiaohan",
-  "license": "ISC",
+  "author": "@deepjs",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/deepjs-net/N-blog/issues"
   },
-  "homepage": "https://github.com/deepjs-net/N-blog#readme"
+  "homepage": "https://github.com/deepjs-net/N-blog#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
