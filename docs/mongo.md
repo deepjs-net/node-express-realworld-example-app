@@ -29,6 +29,7 @@ db.once('open', function() {
       comment:[]
      }
     });
+
     var User = mongoose.model('user', userSchema);
     var Frank = new User({
       user:{ username:'Frank',
@@ -51,6 +52,7 @@ Boolean     布尔值
 Mixed       混合类型
 ObjectId    对象ID
 Array       数组
+Schema.Types.ObjectId
 
 ## 常用约束
 
@@ -61,6 +63,98 @@ max: 最大值(只适用于数字)
 match: 正则匹配(只适用于字符串)
 enum:  枚举匹配(只适用于字符串)
 validate: 自定义匹配
+
+## 静态方法，通过Schema对象的statics属性给model添加的方法
+
+- 创建或更新数据
+  1. create()
+  2. inserrtMany()
+- 查询
+  1. find()
+  2. findById()
+  3. findOne()
+- 更新
+  1. update(condition, doc, [options], [callback])
+    - safe (boolean)： 默认为true。安全模式。
+    - upsert (boolean)： 默认为false。如果不存在则不创建新记录。
+    - multi (boolean)： 默认为false。是否更新多个查询记录。
+    - runValidators： 如果值为true，执行Validation验证。
+    - setDefaultsOnInsert： 如果upsert选项为true，在新建时插入文档定义的默认值。
+    - strict (boolean)： 以strict模式进行更新。
+    - overwrite (boolean)： 默认为false。禁用update-only模式，允许覆盖记录。
+  2. updateOne()
+  3. updateMany()
+  4. findByIdAndUpdate()
+  5. findOneAndUpdate()
+
+- 其他处理方法
+  1. exec(err, docs)
+  2. then()
+
+- 后续处理方法
+
+sort 排序
+skip 跳过
+limit 限制
+select 显示字段
+exect 执行
+count 计数
+distinct 去重
+
+- 连表操作 population(path, [select], [model], [match], [options])
+path 要关联的表
+select 字段
+model 关联字段的model
+match 查询条件
+options 其他查询条件或后续操作
+
+- 删除
+  - remove()
+  - findOneAndRemove()
+  - findByIdAndRemove()
+
+- 条件使用规则
+
+- 查询条件
+$or　　　　     或关系
+$nor　　　     或关系取反
+$gt　　　　    大于
+$gte　　　     大于等于
+$lt　　　　    小于
+$lte　　　     小于等于
+$ne　　        不等于
+$in　　        在多个值范围内
+$nin　　       不在多个值范围内
+$all　　    　 匹配数组中多个值
+$regex　　    正则，用于模糊查询
+$size　　   　匹配数组大小
+$maxDistance　范围查询，距离（基于LBS）
+$mod　　　  　取模运算
+$near　　　   邻域查询，查询附近的位置（基于LBS）
+$exists　　   字段是否存在
+$elemMatch　  匹配内数组内的元素
+$within　　　 范围查询（基于LBS）
+$box　　　  　 范围查询，矩形范围（基于LBS）
+$center　　　  范围醒询，圆形范围（基于LBS）
+$centerSphere　范围查询，球形范围（基于LBS）
+$slice　　　  　查询字段集合中的元素（比如从第几个之后，第N到第M个元素)
+{$where: "expression" / function}
+
+## 字段修改器
+$inc          增加或减少
+$set          指定字段值
+$unset        删除一个键 {$unset: {age: ''}}
+
+## 数组修改
+$push
+$addToSet
+$pop
+$pull
+
+
+## 实例方法，通过Schema对象的methods给entity添加方法
+
+1. save() 对model实例进行保存
 
 ## vscode配置参数
 
