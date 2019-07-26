@@ -4,7 +4,8 @@
   "description": "learn node & mongodb",
   "main": "index.js",
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "start:debug": "node --inspect=ip:9229 ./index.js"
   },
   "repository": {
     "type": "git",
