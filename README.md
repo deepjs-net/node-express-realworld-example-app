@@ -8,7 +8,7 @@
 - express 的使用
 - MongoDB 的使用
 
-项目设计
+## 项目设计
 
 - 路由控制
 - 用户系统
@@ -19,6 +19,24 @@
 - 日志跟踪
 - 测试
 - 部署
+
+## 项目结构
+
+```bash
+.
+├── LICENSE
+├── README.md
+├── config        # 配置
+├── docs
+├── api
+├── lib
+├── logs
+├── middlewares
+├── models
+├── routes
+├── views
+└── index.js
+```
 
 参考：
 
