@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const routes = require('./routes');
-const config = require('./configs');
+const config = require('./config');
 const app = express();
 
 // 模板目录
