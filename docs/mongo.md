@@ -151,6 +151,30 @@ $addToSet
 $pop
 $pull
 
+## 统计 aggregate()
+
+- 管道操作
+  $project：修改输入文档的结构。可以用来重命名、增加或删除域，也可以用于创建计算结果以及嵌套文档。对应project()方法
+  $match：用于过滤数据，只输出符合条件的文档。$match使用MongoDB的标准查询操作。对应match()。
+  $limit：用来限制MongoDB聚合管道返回的文档数。对应limit()方法
+  $skip：在聚合管道中跳过指定数量的文档，并返回余下的文档。对应skip()。
+  $unwind：将文档中的某一个数组类型字段拆分成多条，每条包含数组中的一个值。对应unwind()方法
+  $group：将集合中的文档分组，可用于统计结果。对应group()方法
+  $sort：将输入文档排序后输出。对应sort()方法
+  $geoNear：输出接近某一地理位置的有序文档。对应near()。
+  $sample：随机选择N个
+  $lookup：连接操作符，用于连接同一个数据库中另一个集合，并获取指定的文档，类似于populate
+
+- group的表达式
+
+  $sum	总结从集合中的所有文件所定义的值.	db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : "$likes"}}}])
+  $avg	从所有文档集合中所有给定值计算的平均.	db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$avg : "$likes"}}}])
+  $min	获取集合中的所有文件中的相应值最小.	db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$min : "$likes"}}}])
+  $max	获取集合中的所有文件中的相应值的最大.	db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$max : "$likes"}}}])
+  $push	值插入到一个数组生成文档中.	db.mycol.aggregate([{$group : {_id : "$by_user", url : {$push: "$url"}}}])
+  $addToSet	值插入到一个数组中所得到的文档，但不会创建重复.	db.mycol.aggregate([{$group : {_id : "$by_user", url : {$addToSet : "$url"}}}])
+  $first	根据分组从源文档中获取的第一个文档。通常情况下，这才有意义，连同以前的一些应用 “$sort”-stage.	db.mycol.aggregate([{$group : {_id : "$by_user", first_url : {$first : "$url"}}}])
+  $last	根据分组从源文档中获取最后的文档。通常，这才有意义，连同以前的一些应用 “$sort”-stage.	db.mycol.aggregate([{$group : {_id : "$by_user", last_url : {$last : "$url"}}}])
 
 ## 实例方法，通过Schema对象的methods给entity添加方法
 
