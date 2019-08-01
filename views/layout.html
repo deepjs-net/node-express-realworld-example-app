@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- see http://smerity.com/articles/2013/where_did_all_the_http_referrers_go.html -->
+  <meta name="referrer" content="always">
+  <meta name="keywords" content="<%= blog.keywords %>"/>
+  <meta name='description' content='<%= blog.description %>'>
+  <title><%= blog.title %></title>
+  <link title="RSS" type="application/rss+xml" rel="alternate" href="/rss"/>
+</head>
+<body>
+  <div id="main">
+    <%- body %>
+  </div>
+</body>
+</html>

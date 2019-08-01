@@ -45,6 +45,14 @@
 └── index.js
 ```
 
+## 流程
+
+- 访问 server 经由 routes
+- 路由转由 controllers 响应
+- controllers 调用 api
+- api 使用 models 操作数据库
+- controllers 将响应的数据填充模板返回
+
 参考：
 
 - https://github.com/nswbmw/N-blog
