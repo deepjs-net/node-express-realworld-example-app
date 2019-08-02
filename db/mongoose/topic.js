@@ -7,12 +7,12 @@ const TopicSchema = new Schema({
   desc: { type: String },
   content: { type: String },
   author_id: { type: ObjectId },
-  top: { type: Boolean, default: false }, // 置顶帖
-  good: {type: Boolean, default: false}, // 精华帖
-  lock: {type: Boolean, default: false}, // 被锁定主题
-  comments_count: { type: Number, default: 0 },
-  views_count: { type: Number, default: 0 },
-  likes_count: { type: Number, default: 0 },
+  // top: { type: Boolean, default: false }, // 置顶帖
+  // good: {type: Boolean, default: false}, // 精华帖
+  // lock: {type: Boolean, default: false}, // 被锁定主题
+  comment_count: { type: Number, default: 0 },
+  view_count: { type: Number, default: 0 },
+  like_count: { type: Number, default: 0 },
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now },
   deleted: {type: Boolean, default: false},
@@ -36,4 +36,4 @@ TopicSchema.index({author_id: 1, create_at: -1});
 //   }
 // });
 
-mongoose.model('Topic', TopicSchema);
+exports.TopicModel = mongoose.model('Topic', TopicSchema);

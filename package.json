@@ -1,5 +1,5 @@
 {
-  "name": "@deepjs/n-blog",
+  "name": "@deepjs/nblog",
   "version": "0.0.1",
   "description": "使用 Express + MongoDB 搭建多人博客",
   "main": "index.js",
@@ -7,8 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "node ./app.js",
-    "start:debug": "node --inspect=ip:9229 ./app.js"
+    "start": "cross-env NODE_ENV=production pm2 start app.js --name nblog",
+    "stop": "cross-env NODE_ENV=production pm2 stop nblog",
+    "start:debug": "node --inspect=ip:9229 ./app.js",
+    "test": "node ./test/index.js"
   },
   "repository": {
     "type": "git",

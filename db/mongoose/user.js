@@ -32,4 +32,4 @@ UserSchema.pre('save', function(next){
   next();
 });
 
-mongoose.model('User', UserSchema);
+exports.UserModel = mongoose.model('User', UserSchema);

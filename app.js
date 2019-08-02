@@ -12,7 +12,7 @@ const app = express();
 const argument = process.argv;
 
 // 静态资源目录
-app.use(express.static(path.join(__dirname, 'assets')))
+app.use(express.static(path.join(__dirname, 'public')))
 
 // 模板目录
 app.set('views', path.join(__dirname, 'view'));
