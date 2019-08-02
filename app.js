@@ -4,8 +4,8 @@ const cors = require('cors');
 
 const config = require('./config');
 const logger = require('./common/logger');
-const apiRouter = require('./routes/api');
-const webRouter = require('./routes/web');
+const apiRouter = require('./api_router');
+const webRouter = require('./web_router');
 // const db = require('./db');
 // const ip = require('ip').address();
 const app = express();
@@ -15,7 +15,7 @@ const argument = process.argv;
 app.use(express.static(path.join(__dirname, 'assets')))
 
 // 模板目录
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'view'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs-mate'));
 

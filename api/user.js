@@ -1,4 +1,4 @@
-const model = require('../models').User;
+const model = require('../model').User;
 
 module.exports = {
   create: userInfo => {

@@ -1,8 +1,8 @@
 
 const express = require('express');
 
-const topic = require('../controllers/topic');
-const user = require('../controllers/user');
+const topic = require('./controller/topic');
+const user = require('./controller/user');
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-const model = require('../models').Topic;
+const model = require('../model').Topic;
 
 module.exports = {
   create: info => {

@@ -7,8 +7,8 @@
 1. npm start:debug
 2. http://ip:9229/json/version 查看远程调试是否已启动
 3. 如果是多个进程，即存在多个端口，在launch.json配置
-=======
-目标达成
+
+## 目标达成
 
 - nodejs 搭建服务
 - express 的使用
@@ -28,21 +28,25 @@
 
 ## 项目结构
 
+文件名，数据库字段名，全用单数
+
 ```bash
-.
+./
 ├── LICENSE
 ├── README.md
-├── config        # 配置
+├── api/          # 编写业务逻辑层，并暴露 api 接口
+├── config/       # 配置
+├── controller/   # 解析用户的输入，处理后返回相应的结果
 ├── docs
-├── api
-├── lib
 ├── logs
-├── middlewares
-├── models 对数据库操作的公共方法
-├── controller 封装的接口
-├── routes
-├── views
-└── index.js
+├── lib
+├── middleware/   # 中间件
+├── model/       # 暴露操作数据库的方法
+├── public/       # 静态资源
+├── schedule/     # 定时任务
+├── view/        # 放置模板文件
+├── router.js     # 配置 URL 路由规则
+└── app.js        # 自定义启动时的初始化工作
 ```
 
 ## 流程
@@ -60,3 +64,4 @@
 - https://docs.mongodb.com/guides/server/install/
 - https://blog.51cto.com/lqding/1735674
 - https://github.com/zengzhan/qqzeng-ip
+- https://shift-alt-ctrl.iteye.com/blog/2259216
