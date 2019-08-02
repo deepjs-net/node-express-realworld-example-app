@@ -1,6 +1,15 @@
 const db = require('../db')
 
 module.exports = {
+  index: (req, res, next) => {
+    res.render('index', {
+      data: 'hello',
+    });
+    next();
+  },
+  create: (req, res, next) => {},
+  update: (req, res, next) => {},
+  find: (req, res, next) => {},
   // users: async function(){
   //   return await db.user.find({}).exec();
   // },

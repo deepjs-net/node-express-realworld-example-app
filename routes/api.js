@@ -2,7 +2,7 @@
 const express = require('express');
 
 const user = require('../api/user');
-const post = require('../api/post');
+const topic = require('../api/topic');
 
 const router = express.Router();
 

@@ -2,18 +2,22 @@
 const express = require('express');
 
 const user = require('../controllers/user');
-const post = require('../controllers/post');
+const topic = require('../controllers/topic');
+const user = require('../controllers/user');
 
 const router = express.Router();
 
 // 博文
-router.get('/', post.index)
-router.get('/posts', post.index)
-router.get('/post/create', post.create)
-router.get('/post/:id', post.find)
-router.post('/post/:id/edit', post.update)
+router.get('/', topic.index)
+router.get('/topic/create', topic.create)
+router.post('/topic/:id/edit', topic.update)
+router.get('/topic/:id', topic.find)
+router.get('/topic', topic.index)
 
 // 用户
-
+router.get('/', user.index)
+router.get('/user/create', user.create)
+router.get('/user/:id', user.find)
+router.get('/user', user.index)
 
 module.exports = router;
