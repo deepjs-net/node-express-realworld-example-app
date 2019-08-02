@@ -1,6 +1,10 @@
 const db = require('../db')
 
 module.exports = {
+  test: (req, res, next) => {
+    console.log(req.params)
+    res.send('hello, ' + req.params.name)
+  },
   index: (req, res, next) => {
     res.render('index', {
       data: 'hello',

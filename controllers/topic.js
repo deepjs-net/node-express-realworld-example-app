@@ -1,11 +1,15 @@
 const db = require('../db')
 
 module.exports = {
+  test: (req, res, next) => {
+    res.render('index', {
+      data: 'hello',
+    });
+  },
   index: (req, res, next) => {
     res.render('index', {
       data: 'hello',
     });
-    next();
   },
   create: (req, res, next) => {},
   update: (req, res, next) => {},

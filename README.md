@@ -58,3 +58,5 @@
 - https://github.com/nswbmw/N-blog
 - https://expressjs.com/en/4x/api.html
 - https://docs.mongodb.com/guides/server/install/
+- https://blog.51cto.com/lqding/1735674
+- https://github.com/zengzhan/qqzeng-ip
