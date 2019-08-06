@@ -1,7 +1,10 @@
 const mongoose  = require('mongoose');
-const Schema    = mongoose.Schema;
+const Schema = mongoose.Schema;
 const ObjectId  = Schema.ObjectId;
 
+// const Tags = new Schema({
+//   tag: String
+// });
 const TopicSchema = new Schema({
   title: { type: String },
   desc: { type: String },
@@ -10,9 +13,13 @@ const TopicSchema = new Schema({
   // top: { type: Boolean, default: false }, // 置顶帖
   // good: {type: Boolean, default: false}, // 精华帖
   // lock: {type: Boolean, default: false}, // 被锁定主题
-  comment_count: { type: Number, default: 0 },
-  view_count: { type: Number, default: 0 },
-  like_count: { type: Number, default: 0 },
+  //   comment_count: { type: Number, default: 0 },
+  //   view_count: { type: Number, default: 0 },
+  //   like_count: { type: Number, default: 0 },
+  // comments: [
+  //   { body: String, date: Date }
+  // ],
+  // tags: [Tags],
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now },
   deleted: {type: Boolean, default: false},

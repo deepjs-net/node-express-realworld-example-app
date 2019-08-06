@@ -2,11 +2,9 @@ const mongoose = require('mongoose')
 const config = require('../../config')
 const logger = require('../../common/logger')
 
-const dbc = config.dev.mongodb;
-
 // 创建一个数据库连接
 // mongodb://user:pass@ip:port/database
-const DB_URL = `mongodb://${dbc.host}:${dbc.port}/${dbc.dbname}`;
+const DB_URL = config.mongodb;
 
 // 连接
 // mongoose.createConnection(uri, { poolSize: 4 })
@@ -22,6 +20,7 @@ mongoose.connect(DB_URL, {
 });
 
 const db = mongoose.connection;
+// mongoose.disconnect(callback)
 
 // 连接成功
 db.on('connected', res => {

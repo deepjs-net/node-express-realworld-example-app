@@ -18,11 +18,13 @@ https://cloud.tencent.com/developer/article/1054482
 
 ## user
 
+https://api.github.com/users/cloudyan
+
 - user_id 用户id
 - user_name 用户名
 - nick_name 昵称
-- create_at 创建时间
-- update_at 更新时间
+- create_at 创建时间 2011-07-13T14:07:57Z
+- update_at 更新时间 2019-07-22T14:29:51Z
 - intro 介绍
 
 ## topic

@@ -15,7 +15,7 @@ const {
 // TopicModel.create
 const userInfo = {
   user_id: 100000,
-  user_name: 'cloudyan',
+  username: 'cloudyan',
   password: 'xxx',
   nick_name: 'xxx',
   create_at: new Date().toJSON(),

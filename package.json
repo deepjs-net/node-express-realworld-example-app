@@ -9,7 +9,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production pm2 start app.js --name nblog",
     "stop": "cross-env NODE_ENV=production pm2 stop nblog",
-    "start:debug": "node --inspect=ip:9229 ./app.js",
+    "restart": "npm run stop && npm run start",
+    "dev": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 app.js",
+    "start:debug": "node --inspect ./app.js",
     "test": "node ./test/index.js"
   },
   "repository": {
@@ -28,12 +30,17 @@
   },
   "homepage": "https://github.com/deepjs-net/N-blog#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^3.0.0",
     "cors": "^2.8.5",
     "ejs-mate": "^3.0.0",
+    "errorhandler": "^1.5.1",
     "express": "^4.17.1",
+    "express-session": "^1.16.2",
     "express-winston": "^3.2.1",
     "log4js": "^4.5.1",
-    "mongoose": "^5.6.7",
+    "mongoose": "^5.6.8",
     "winston": "^3.2.1"
   }
 }
