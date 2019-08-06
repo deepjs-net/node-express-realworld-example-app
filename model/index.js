@@ -3,9 +3,32 @@ const db = require('../db/mongoose')
 // console.log(db);
 
 const {
-  UserModel,
+  TestModel,
   TopicModel,
+  UserModel,
 } = db;
+
+const testModel = {
+  findAll(query = {}) {
+    return TestModel
+      .find(query)
+      .exec();
+  },
+  findOne(query = {}) {
+    return TestModel
+      .findOne(query)
+      .exec();
+  },
+  create(info) {
+    return TestModel.create(info);
+  },
+  update(query = {}, data, bool) {
+    return UserModel.update(query, data, bool).exec();
+  },
+  delete(query = {}, data) {
+    return UserModel.findOneAndUpdate(query, data).exec();
+  },
+}
 
 const userModel = {
   create(info) {
@@ -99,5 +122,6 @@ const topicModel = {
   }
 }
 
-exports.userModel = userModel
+exports.testModel = testModel
 exports.topicModel = topicModel
+exports.userModel = userModel

@@ -4,3 +4,4 @@
 exports.db = require('./db');
 exports.UserModel = require('./user').UserModel;
 exports.TopicModel = require('./topic').TopicModel;
+exports.TestModel = require('./test').TestModel;

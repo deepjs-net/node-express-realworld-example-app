@@ -12,8 +12,6 @@ module.exports = {
       password,
     } = req.body;
 
-
-
     const info = {
       user_id,
       username: `${username}${getNum()}`,
