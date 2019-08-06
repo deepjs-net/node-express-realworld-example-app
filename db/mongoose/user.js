@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   user_id: { type: String, required: true },
-  username: { type: String },
+  username: { type: String, required: true },
   password: { type: String },
+  bio: { type: String },
   // email: { type: String},
 
   topic_count: { type: Number, default: 0 },
@@ -21,7 +22,7 @@ const UserSchema = new Schema({
 
 // UserSchema.plugin(BaseModel);
 
-UserSchema.index({user_name: 1}, {unique: true});
+UserSchema.index({username: 1}, {unique: true});
 // UserSchema.index({email: 1}, {unique: true});
 // UserSchema.index({score: -1});
 // UserSchema.index({githubId: 1});

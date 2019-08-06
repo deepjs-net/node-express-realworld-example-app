@@ -1,14 +1,14 @@
 const model = require('../model').topicModel;
 
 module.exports = {
-  getTopics: (req, res, next) => {
+  getAll(req, res, next) {
     const author = req.query.author
-    model.getTopics(author)
+    model.getAll(author)
       .then(function (data) {
         res.send(data)
       })
   },
-  create: (req, res, next) => {
+  create(req, res, next) {
     // nodejs 接收post 请求数据
     // https://segmentfault.com/q/1010000003043380
     // https://blog.csdn.net/HaoDaWang/article/details/53024122
@@ -31,12 +31,12 @@ module.exports = {
         })
       })
   },
-  updateTopicById: (req, res, next) => {
+  updateTopicById(req, res, next) {
     res.send({
       hello: new Date().toJSON(),
     })
   },
-  getTopicById: (req, res, next) => {
+  getTopicById(req, res, next) {
     res.send({
       hello: new Date().toJSON(),
     })

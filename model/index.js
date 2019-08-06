@@ -8,31 +8,37 @@ const {
 } = db;
 
 const userModel = {
-  create: userInfo => {
-    UserModel.create(userInfo);
+  create(info) {
+    return UserModel.create(info);
   },
-  find: () => {
-    UserModel.find().exec();
+  getAll(query = {}) {
+    return UserModel
+      .find(query)
+      .exec();
   },
-  findOne: id => {
-    UserModel.findOne({user_id: id}).exec();
+  getUserByName(name) {
+    return UserModel
+      .findOne({username: name})
+      .exec();
   },
-  update: info => {
-    UserModel.update({user_id: info.user_id}, info, true);
+  updateUserById(info) {
+    return UserModel
+      .update({ user_id: info.user_id }, info, true)
+      .exec()
   },
-  delete: id => {
-    UserModel.remove({user_id: id});
+  deleteUserById(userId) {
+    return UserModel.remove({user_id: userId});
   },
 }
 
 
 const topicModel = {
   // 创建一篇文章
-  create: info => {
+  create(info) {
     return TopicModel.create(info);
   },
   // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
-  getTopics: author => {
+  getAll(author) {
     const query = {}
     if (author) {
       query.author = author
@@ -45,7 +51,7 @@ const topicModel = {
     // return res;
   },
   // 通过文章 id 获取一篇文章
-  getTopicById: topicId => {
+  getTopicById(topicId) {
     return TopicModel
       .findOne({ _id: topicId })
       // .populate({ path: 'author', model: 'User' })
@@ -54,31 +60,33 @@ const topicModel = {
       // .contentToHtml()
       .exec()
   },
-  getTopicByTitle: title => {
+  getTopicByTitle(title) {
     return TopicModel
       .findOne({ title })
       .addCreateAt()
       .exec()
   },
   // 通过文章 id 给 pv 加 1
-  incPv: topicId => {
+  incPv(topicId) {
     return TopicModel
       .update({ _id: topicId }, { $inc: { pv: 1 } })
       .exec()
   },
   // 通过文章 id 获取一篇原生文章（编辑文章）
-  getRawTopicById: topicId => {
+  getRawTopicById(topicId) {
     return TopicModel
       .findOne({ _id: topicId })
       .populate({ path: 'author', model: 'User' })
       .exec()
   },
   // 通过文章 id 更新一篇文章
-  updateTopicById: (topicId, data) => {
-    return TopicModel.update({ _id: topicId }, { $set: data }).exec()
+  updateTopicById(info) {
+    return TopicModel
+      .update({ _id: info.id }, { $set: info })
+      .exec()
   },
   // 通过文章 id 删除一篇文章
-  delTopicById: topicId => {
+  deleteTopicById(topicId) {
     return TopicModel
       .deleteOne({ _id: topicId })
       .exec()
