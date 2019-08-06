@@ -72,6 +72,12 @@
 - 完成用户注册、登录功能
 - 完成发布、编辑、评论文章功能
 
+## 思考
+
+- spring
+  - 约定优于配置
+- 自动化
+
 参考：
 
 - https://github.com/nswbmw/N-blog
@@ -80,3 +86,22 @@
 - https://blog.51cto.com/lqding/1735674
 - https://github.com/zengzhan/qqzeng-ip
 - https://shift-alt-ctrl.iteye.com/blog/2259216
+
+关于 Spring
+
+- https://www.w3cschool.cn/springboot/
+- https://www.w3cschool.cn/spring_mvc_documentation_linesh_translation/
+- https://www.w3cschool.cn/minicourse/play/springbootrm
+- https://github.com/JeffLi1993/springboot-learning-example
+- https://www.w3cschool.cn/wkspring/
+
+- 基础 - 入门篇
+- 基础 - Web 业务开发篇
+- 基础 – 数据存储篇
+- 基础 – 数据缓存篇
+- 基础 – 日志管理篇
+- 基础 – 应用篇
+- 提升 – 安全控制及权限篇
+- 提升 – 消息服务篇
+- 提升 – 源码篇
+- 其他篇
