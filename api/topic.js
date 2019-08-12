@@ -1,6 +1,6 @@
-const model = require('../model').topicModel;
+import { topicModel as model } from '../model';
 
-module.exports = {
+export default {
   getAll(req, res, next) {
     const { author } = req.query
     model.findAll({ author })

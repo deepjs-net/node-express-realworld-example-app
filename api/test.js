@@ -1,10 +1,10 @@
-const model = require('../model').testModel;
+import { testModel as model } from '../model';
 
 function getNum() {
   return Date.now() % 100000000;
 }
 
-module.exports = {
+export default {
   findAll(req, res, next) {
     console.log(req.body);
     model.findAll(req.body)

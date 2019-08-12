@@ -1,4 +1,4 @@
 
-exports.formatDate = function(date, human) {
+export function formatDate(date, human) {
   return 'xxx'
 }

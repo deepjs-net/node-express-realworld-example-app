@@ -1,9 +1,9 @@
 
-const express = require('express');
+import express from 'express'
 
-const test = require('./api/test');
-const topic = require('./api/topic');
-const user = require('./api/user');
+import test from './api/test'
+import topic from './api/topic'
+import user from './api/user'
 
 const router = express.Router();
 
@@ -26,6 +26,4 @@ router.post('/user/create', user.create)
 router.post('/user/:id/edit', user.updateUserById)
 router.get('/user/:id', user.getUserById)
 
-
-
-module.exports = router;
+export default router;

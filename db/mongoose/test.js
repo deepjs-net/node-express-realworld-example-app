@@ -1,5 +1,6 @@
-const mongoose  = require('mongoose');
+import mongoose from 'mongoose'
 // const BaseModel  = require('base-model');
+
 const Schema = mongoose.Schema;
 const ObjectId  = Schema.ObjectId;
 
@@ -36,4 +37,4 @@ ModelSchema.pre('save', function(next){
   next();
 });
 
-exports.TestModel = mongoose.model('Test', ModelSchema);
+export const TestModel = mongoose.model('Test', ModelSchema);

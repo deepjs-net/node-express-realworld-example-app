@@ -1,10 +1,10 @@
-const model = require('../model').userModel;
+import { userModel as model } from '../model'
 
 function getNum() {
   return Date.now() % 100000000;
 }
 
-module.exports = {
+export default {
   create(req, res, next) {
     const {
       user_id,

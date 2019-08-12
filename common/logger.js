@@ -1,6 +1,6 @@
-const path = require('path')
-const log4js = require('log4js')
-const config = require('../config')
+import path from 'path'
+import log4js from 'log4js'
+import config from '../config'
 
 const env = process.env.NODE_ENV || "development"
 
@@ -22,4 +22,4 @@ const logger = log4js.getLogger('cheese');
 
 logger.level = (config.debug && env !== 'test' ? 'DEBUG' : 'ERROR')
 
-module.exports = logger;
+export default logger;

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
-const config = require('../../config')
-const logger = require('../../common/logger')
+import mongoose from 'mongoose'
+import config from '../../config'
+import logger from '../../common/logger'
 
 // 创建一个数据库连接
 // mongodb://user:pass@ip:port/database
@@ -19,25 +19,24 @@ mongoose.connect(DB_URL, {
   }
 });
 
-const db = mongoose.connection;
+const mdb = mongoose.connection;
 // mongoose.disconnect(callback)
 
 // 连接成功
-db.on('connected', res => {
+mdb.on('connected', res => {
   console.log('Mongoose connection open to ' + DB_URL);
 })
-db.on('disconnected', res => {
+mdb.on('disconnected', res => {
   console.log('Mongoose connection disconnected');
 })
 
 // 连接异常
-db.on('error', err => {
+mdb.on('error', err => {
   console.log('Mongoose connection error: ' + err);
 })
 
-db.once('open', function() {
+mdb.once('open', function() {
   // we're connected!
 })
 
-module.exports = mongoose
-
+export const db = mongoose

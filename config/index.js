@@ -1,5 +1,5 @@
 
-const path = require('path')
+import path from 'path'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -31,4 +31,4 @@ const config = {
   }
 }
 
-module.exports = config;
+export default config;

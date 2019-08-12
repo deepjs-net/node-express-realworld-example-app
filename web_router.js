@@ -1,11 +1,11 @@
 
-const express = require('express');
+import express from 'express'
 
-const auth = require('./middleware/auth');
+import auth from './middleware/auth'
 
-const topic = require('./controller/topic');
-const user = require('./controller/user');
-const sign = require('./controller/sign');
+import topic from './controller/topic'
+import user from './controller/user'
+import sign from './controller/sign'
 
 const router = express.Router();
 

@@ -1,4 +1,5 @@
-const mongoose  = require('mongoose');
+import mongoose from 'mongoose'
+
 const Schema = mongoose.Schema;
 const ObjectId  = Schema.ObjectId;
 
@@ -43,4 +44,4 @@ TopicSchema.index({author_id: 1, create_at: -1});
 //   }
 // });
 
-exports.TopicModel = mongoose.model('Topic', TopicSchema);
+export const TopicModel = mongoose.model('Topic', TopicSchema);

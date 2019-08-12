@@ -1,23 +1,24 @@
-const path = require('path');
-const express = require('express');
-const session = require('express-session')
-const MongoStore = require('connect-mongo')(session)
-const cors = require('cors');
-const flash = require('connect-flash')
-const bodyParser = require('body-parser');
-const winston = require('winston')
-const expressWinston = require('express-winston')
-// const errorhandler = require('errorhandler');
+import path from 'path'
+import express from 'express'
+import session from 'express-session'
+import ConnectStore from 'connect-mongo'
+import cors from 'cors'
+import flash from 'connect-flash'
+import bodyParser from 'body-parser'
+import winston from 'winston'
+import expressWinston from 'express-winston'
+// import errorhandler from 'errorhandler'
 
-const config = require('./config');
-const logger = require('./common/logger');
-const apiRouter = require('./api_router');
-const webRouter = require('./web_router');
+import config from './config'
+import logger from './common/logger'
+import apiRouter from './api_router'
+import webRouter from './web_router'
 // const db = require('./db');
 // const ip = require('ip').address();
 
 const app = express();
 const argument = process.argv;
+const MongoStore = ConnectStore(session);
 
 // 静态资源目录
 app.use(express.static(path.join(__dirname, 'public')))

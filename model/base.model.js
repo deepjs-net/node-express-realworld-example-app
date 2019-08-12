@@ -5,6 +5,7 @@ export class BaseModel {
   }
 
   findAll(query = {}) {
+    debugger;
     return this._model
       .find(query)
       .exec();

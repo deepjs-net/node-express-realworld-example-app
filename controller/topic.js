@@ -1,6 +1,6 @@
-const db = require('../db')
+import api from '../api'
 
-module.exports = {
+export default {
   test: (req, res, next) => {
     res.render('index', {
       data: 'hello',

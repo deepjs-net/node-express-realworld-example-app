@@ -1,5 +1,6 @@
-const mongoose  = require('mongoose');
+import mongoose from 'mongoose'
 // const BaseModel = require('./base_model');
+
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -34,4 +35,4 @@ UserSchema.pre('save', function(next){
   next();
 });
 
-exports.UserModel = mongoose.model('User', UserSchema);
+export const UserModel = mongoose.model('User', UserSchema);

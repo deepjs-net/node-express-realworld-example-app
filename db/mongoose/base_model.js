@@ -3,9 +3,9 @@
  * http://mongoosejs.com/docs/plugins.html
  */
 
-const util = require('../../util');
+import util from '../../util'
 
-module.exports = function (schema) {
+export default function (schema) {
   schema.methods.create_at_ago = function () {
     return util.formatDate(this.create_at, true);
   };
