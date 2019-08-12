@@ -105,16 +105,13 @@ app.use(expressWinston.errorLogger({
   });
 // }
 
-
-
-
 const ip = '127.0.0.1'
 
 // const env = argument[2] || 'dev';
 if(module.parent){
   // 被 require，则导出 app
   module.exports = app;
-}else{
+} else {
   // 监听端口，启动程序
   app.listen(config.port, ()=>{
     console.log(`start programme ${ip}:${config.port} \n`);

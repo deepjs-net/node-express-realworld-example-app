@@ -3,7 +3,7 @@ const model = require('../model').topicModel;
 module.exports = {
   getAll(req, res, next) {
     const { author } = req.query
-    model.getAll(author)
+    model.findAll({ author })
       .then(function (data) {
         res.send(data)
       })

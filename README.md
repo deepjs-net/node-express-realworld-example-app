@@ -13,6 +13,13 @@
 1. `node --inspect=[127.0.0.1:9229] ./app.js`
 2. chrome 浏览器打开 `chrome://inspect`
 
+也可以使用
+
+```js
+// --watch 在当前目录或其子目录中修改文件时，PM2可以自动重新启动应用程序
+"dev": "pm2 start app.js --node-args='--inspect-brk' --watch",
+```
+
 参考文档: https://nodejs.org/en/docs/guides/debugging-getting-started/
 
 ## 目标达成

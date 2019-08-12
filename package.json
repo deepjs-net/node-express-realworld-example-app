@@ -10,8 +10,10 @@
     "start": "cross-env NODE_ENV=production pm2 start app.js --name nblog",
     "stop": "cross-env NODE_ENV=production pm2 stop nblog",
     "restart": "npm run stop && npm run start",
-    "dev": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 app.js",
-    "start:debug": "node --inspect ./app.js",
+    "dev": "pm2 start app.js --node-args='--inspect' --watch",
+    "dev2": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 app.js",
+    "debug": "node --inspect ./app.js",
+    "babel": "npx babel-node --inspect ./app.js",
     "test": "node ./test/index.js"
   },
   "repository": {
@@ -30,6 +32,8 @@
   },
   "homepage": "https://github.com/deepjs-net/N-blog#readme",
   "dependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.4",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^3.0.0",
