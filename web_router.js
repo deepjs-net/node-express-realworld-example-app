@@ -3,11 +3,19 @@ import express from 'express'
 
 import auth from './middleware/auth'
 
+import test from './controller/test'
 import topic from './controller/topic'
 import user from './controller/user'
 import sign from './controller/sign'
 
 const router = express.Router();
+
+// TEST
+router.get('/', test.index)
+router.get('/test/create', test.create)
+router.post('/test/:id/edit', test.update)
+router.get('/test/:id', test.find)
+router.get('/test', test.index)
 
 // 博文
 router.get('/', topic.index)

@@ -7,6 +7,7 @@ export default {
     });
   },
   index: (req, res, next) => {
+    api.topic.getAll({})
     res.render('index', {
       data: 'hello',
     });
