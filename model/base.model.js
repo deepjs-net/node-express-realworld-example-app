@@ -16,6 +16,11 @@ export class BaseModel {
       .findOne(query)
       .exec();
   }
+  findById(id) {
+    return this._model
+      .findOne(query)
+      .exec();
+  }
 
   create(info) {
     return this._model.create(info);

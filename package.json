@@ -38,13 +38,20 @@
     "connect-flash": "^0.1.1",
     "connect-mongo": "^3.0.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "ejs-mate": "^3.0.0",
     "errorhandler": "^1.5.1",
+    "eventproxy": "^1.0.0",
     "express": "^4.17.1",
+    "express-jwt": "^5.3.1",
     "express-session": "^1.16.2",
     "express-winston": "^3.2.1",
+    "jsonwebtoken": "^8.5.1",
     "log4js": "^4.5.1",
     "mongoose": "^5.6.8",
+    "mongoose-unique-validator": "^2.0.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "winston": "^3.2.1"
   }
 }

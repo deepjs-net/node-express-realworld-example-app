@@ -1,9 +1,7 @@
-import test from './test'
-import topic from './topic'
 import user from './user'
+import topic from './topic'
 
 export default {
-  test,
   topic,
   user,
 }
