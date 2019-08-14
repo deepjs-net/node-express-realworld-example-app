@@ -10,11 +10,9 @@ const router = express.Router();
 // 用户 auth.required,
 router.post('/user/signup', user.signup)
 router.post('/user/login', user.login)
-
-router.get('/user', user.getUserById)
-// router.put('/user', auth.required, user.updateUserById)
-// router.post('/users/login', auth.required, user.login)
-// router.post('/users', auth.required, user.updateUserInfo)
+router.get('/user', user.getUserInfo)
+// router.get('/user', auth.required, user.getUserInfo)
+router.put('/user', auth.required, user.updateUserInfo)
 
 // router.get('/user/:username', user.getUserByName)
 

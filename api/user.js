@@ -1,5 +1,6 @@
 import passport from '../common/passport'
 import { User } from '../model'
+import { isUnDef, compactObject } from '../utils'
 
 function getNum() {
   return Date.now() % 100000000;
@@ -20,6 +21,8 @@ export default {
     user.setPassword(password)
 
     user.save().then(() => {
+      // express中 res.json( )和 res.send( )
+      // https://blog.csdn.net/starter_____/article/details/79068894
       return res.json({
         user: user.toAuthJSON()
       })
@@ -62,16 +65,34 @@ export default {
       }
     })(req, res, next)
   },
-  getUserById(req, res, next) {
+  getUserInfo(req, res, next) {
     const {
       id,
+      username,
+      email,
     } = req.body
 
-    User.findById(id).then(data => {
-      // express中 res.json( )和 res.send( )
-      // https://blog.csdn.net/starter_____/article/details/79068894
+    if (id) {
+      User.findById(id).then(data => {
+        if (!data) return res.sendStatus(404)
+        res.json({
+          data: data.toAuthJSON(),
+          // errno: 0, // 默认即成功
+          // errmsg: 'success',
+          logid: '',
+          timestamp: Date.now(),
+        })
+      })
+    }
+
+    const query = {}
+    if (username) query.username = username
+    if (email) query.email = email
+
+    User.findOne(query).then(data => {
+      if (!data) return res.sendStatus(404)
       res.json({
-        data,
+        data: data.toAuthJSON(),
         // errno: 0, // 默认即成功
         // errmsg: 'success',
         logid: '',
@@ -79,7 +100,33 @@ export default {
       })
     })
   },
+  updateUserInfo(req, res, next) {
+    const {
+      id,
+      password,
+      ...rest
+    } = req.body
 
+    if (!id) return res.send({
+      error: `user id is necessary`
+    })
+
+    User.findById(id).then(user => {
+      if (!user) return res.sendStatus(404)
+
+      // only update fields that were actually passed...
+      Object.assign(user, compactObject(rest, [undefined]))
+      if (isUnDef(password)) {
+        user.setPassword(password)
+      }
+
+      return user.save().then(function(){
+        return res.json({
+          data: user.toAuthJSON()
+        })
+      })
+    }).catch(next)
+  },
   // getUserByName(req, res, next) {
   //   const {
   //     username,
