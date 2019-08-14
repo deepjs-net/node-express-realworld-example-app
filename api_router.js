@@ -10,6 +10,7 @@ const router = express.Router();
 // 用户 auth.required,
 router.post('/user/signup', user.signup)
 router.post('/user/login', user.login)
+router.get('/user/list', user.getUserList)
 router.get('/user', user.getUserInfo)
 // router.get('/user', auth.required, user.getUserInfo)
 router.put('/user', auth.required, user.updateUserInfo)

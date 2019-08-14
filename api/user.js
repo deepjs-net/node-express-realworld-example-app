@@ -100,6 +100,20 @@ export default {
       })
     })
   },
+  getUserList(req, res, next) {
+    User.find().then(data => {
+      if (!data) return res.sendStatus(404)
+      res.json({
+        data: {
+          list: data.map(item => item.toJSON()),
+        },
+        // errno: 0, // 默认即成功
+        // errmsg: 'success',
+        logid: '',
+        timestamp: Date.now(),
+      })
+    })
+  },
   updateUserInfo(req, res, next) {
     const {
       id,
