@@ -93,23 +93,23 @@ export default {
           timestamp: Date.now(),
         })
       })
-    }
+    } else {
+      const query = {}
+      if (username) query.username = username
+      if (email) query.email = email
 
-    const query = {}
-    if (username) query.username = username
-    if (email) query.email = email
-
-    User.findOne(query).then(data => {
-      if (!data) return res.sendStatus(404)
-      if (data.deleted) return res.sendStatus(404)
-      res.json({
-        data: data.toAuthJSON(),
-        // errno: 0, // 默认即成功
-        // errmsg: 'success',
-        logid: '',
-        timestamp: Date.now(),
+      User.findOne(query).then(data => {
+        if (!data) return res.sendStatus(404)
+        if (data.deleted) return res.sendStatus(404)
+        res.json({
+          data: data.toAuthJSON(),
+          // errno: 0, // 默认即成功
+          // errmsg: 'success',
+          logid: '',
+          timestamp: Date.now(),
+        })
       })
-    })
+    }
   },
   getUserList(req, res, next) {
     User.find().then(data => {

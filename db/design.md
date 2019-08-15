@@ -24,6 +24,9 @@ https://api.github.com/users/cloudyan
 - username 用户名
 - email
 - hash
+- salt
+- deleted
+- avatar
 - create_at 创建时间 2011-07-13T14:07:57Z
 - update_at 更新时间 2019-07-22T14:29:51Z
 - bio 介绍
