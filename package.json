@@ -13,6 +13,7 @@
     "dev1": "pm2 start app.js --node-args='--inspect' --watch",
     "dev2": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 app.js",
     "dev3": "node --inspect ./app.js",
+    "srart2": "pm2 start app.js --interpreter ./node_modules/@babel/node/bin/babel-node.js",
     "dev": "npx babel-node --inspect ./app.js",
     "test": "node ./test/index.js"
   },

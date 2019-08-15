@@ -97,6 +97,7 @@ UserSchema.methods.toJSON = function() {
     email: this.email,
     bio: this.bio,
     avatar: this.avatar,
+    deleted: this.deleted,
   };
 };
 

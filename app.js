@@ -20,6 +20,7 @@ const app = express();
 const argument = process.argv;
 // const MongoStore = ConnectStore(session);
 
+app.proxy = true
 // 静态资源目录
 app.use(express.static(path.join(__dirname, 'public')))
 

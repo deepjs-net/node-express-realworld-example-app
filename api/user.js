@@ -71,9 +71,18 @@ export default {
     const {
       id,
     } = req.body
-
+    req.session.destroy(function(err) {
+      // cannot access session here
+      console.log(err)
+      return res.json({
+        data: {
+          code: 1,
+          codeText: '注销登录成功',
+        },
+      })
+    })
   },
-  getUserInfo(req, res, next) {
+  getOne(req, res, next) {
     const {
       id,
       username,
@@ -109,12 +118,15 @@ export default {
       })
     }
   },
-  getUserList(req, res, next) {
+  getList(req, res, next) {
     User.find().then(data => {
       if (!data) return res.sendStatus(404)
       res.json({
         data: {
-          list: data.map(item => item.toJSON()),
+          list: data.filter(item => {
+            if (item.deleted) return false
+            return item.toJSON()
+          }),
         },
         // errno: 0, // 默认即成功
         // errmsg: 'success',
@@ -123,7 +135,7 @@ export default {
       })
     })
   },
-  updateUserInfo(req, res, next) {
+  update(req, res, next) {
     const {
       id,
       password,
@@ -150,7 +162,7 @@ export default {
       })
     }).catch(next)
   },
-  deleteUser(req, res, next) {
+  delete(req, res, next) {
     const {
       id,
     } = req.body
@@ -159,12 +171,12 @@ export default {
       error: `user id is necessary`
     })
 
-    User.findById(id).then(user => {
-      if (!user || user.deleted) return res.sendStatus(404)
+    User.findById(id).then(data => {
+      if (!data || data.deleted) return res.sendStatus(404)
 
-      user.deleted = true
+      data.deleted = true
 
-      return user.save().then(function(){
+      return data.save().then(function(){
         return res.json({
           data: {
             code: 1,

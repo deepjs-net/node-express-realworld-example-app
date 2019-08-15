@@ -1,4 +1,4 @@
-# 表设计
+# 数据库设计
 
 https://cloud.tencent.com/developer/article/1054482
 
@@ -38,7 +38,6 @@ https://api.github.com/users/cloudyan
 - author_id 作者
 - desc 描述
 - content 正文
-- author_id 作者
 - views_count 浏览数
 - likes_count 点赞数
 - comments_count 评论数
