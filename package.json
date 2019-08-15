@@ -1,6 +1,6 @@
 {
   "name": "@deepjs/nblog",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "使用 Express + MongoDB 搭建多人博客",
   "main": "index.js",
   "directories": {
