@@ -7,7 +7,7 @@ function getNum() {
 }
 
 export default {
-  signup(req, res, next) {
+  create(req, res, next) {
     const {
       username,
       email,
@@ -33,14 +33,14 @@ export default {
   },
   login(req, res, next) {
     const {
-      username,
+      email,
       password,
     } = req.body
 
-    if (!username) {
+    if (!email) {
       return res.status(422).json({
         data: {
-          username: `can't be blank`
+          email: `can't be blank`
         },
       })
     }
@@ -65,6 +65,14 @@ export default {
       }
     })(req, res, next)
   },
+  logout(req, res, next) {
+    // 退出登录可以前端删除 localStorage 中的 token 实现
+    // 本接口实现在服务端删除用户登录状态，删除 session
+    const {
+      id,
+    } = req.body
+
+  },
   getUserInfo(req, res, next) {
     const {
       id,
@@ -75,6 +83,8 @@ export default {
     if (id) {
       User.findById(id).then(data => {
         if (!data) return res.sendStatus(404)
+        if (data.deleted) return res.sendStatus(404)
+
         res.json({
           data: data.toAuthJSON(),
           // errno: 0, // 默认即成功
@@ -91,6 +101,7 @@ export default {
 
     User.findOne(query).then(data => {
       if (!data) return res.sendStatus(404)
+      if (data.deleted) return res.sendStatus(404)
       res.json({
         data: data.toAuthJSON(),
         // errno: 0, // 默认即成功
@@ -125,84 +136,45 @@ export default {
       error: `user id is necessary`
     })
 
-    User.findById(id).then(user => {
-      if (!user) return res.sendStatus(404)
+    User.findById(id).then(data => {
+      if (!data) return res.sendStatus(404)
 
       // only update fields that were actually passed...
-      Object.assign(user, compactObject(rest, [undefined]))
+      Object.assign(data, compactObject(rest, [undefined]))
       if (isUnDef(password)) {
-        user.setPassword(password)
+        data.setPassword(password)
       }
 
-      return user.save().then(function(){
+      return data.save().then(function(){
         return res.json({
-          data: user.toAuthJSON()
+          data: data.toAuthJSON()
         })
       })
     }).catch(next)
   },
-  // getUserByName(req, res, next) {
-  //   const {
-  //     username,
-  //   } = req.body;
+  deleteUser(req, res, next) {
+    const {
+      id,
+    } = req.body
 
-  //   model.findOne({ username })
-  //     .then(function (data) {
-  //       res.send({
-  //         data,
-  //       })
-  //     })
-  // },
-  // create(req, res, next) {
-  //   const {
-  //     user_id,
-  //     username,
-  //     password,
-  //   } = req.body;
+    if (!id) return res.send({
+      error: `user id is necessary`
+    })
 
-  //   const info = {
-  //     user_id,
-  //     username: `${username}${getNum()}`,
-  //     password: `Hd@9${password}2*#1`,
-  //   }
-  //   model.create(info)
-  //     .then(function (data) {
-  //       res.send({
-  //         meta: data,
-  //         data: '创建用户成功'
-  //       })
-  //     })
-  // },
-  // getAll(req, res, next) {
-  //   model.findAll()
-  //     .then(function (data) {
-  //       res.send(data)
-  //     })
-  // },
-  // getUserById(req, res, next) {
-  //   const {
-  //     id,
-  //   } = req.body;
+    User.findById(id).then(user => {
+      if (!user) return res.sendStatus(404)
+      // if (user.deleted) return res.sendStatus(404)
 
-  //   model.findOne({ user_id: id })
-  //     .then(function (data) {
-  //       res.send({
-  //         data,
-  //       })
-  //     })
-  // },
-  // updateUserById(req, res, next) {
-  //   const {
-  //     userId: user_id,
-  //     // ...rest,
-  //   } = req.body;
+      user.deleted = true
 
-  //   model.findOne({ user_id }, req.body)
-  //     .then(function (data) {
-  //       res.send({
-  //         data,
-  //       })
-  //     })
-  // },
-
+      return user.save().then(function(){
+        return res.json({
+          data: {
+            code: 1,
+            codeText: '删除成功',
+          },
+        })
+      })
+    })
+  },
 }

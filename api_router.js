@@ -8,12 +8,15 @@ import user from './api/user'
 const router = express.Router();
 
 // 用户 auth.required,
-router.post('/user/signup', user.signup)
+router.post('/user/create', user.create)
 router.post('/user/login', user.login)
+router.post('/user/logout', user.logout)
 router.get('/user/list', user.getUserList)
-router.get('/user', user.getUserInfo)
+router.get('/user/info', user.getUserInfo)
 // router.get('/user', auth.required, user.getUserInfo)
-router.put('/user', auth.required, user.updateUserInfo)
+router.put('/user/update', auth.required, user.updateUserInfo)
+router.delete('/user/delete', auth.required, user.deleteUser)
+// router.delete('/user', auth.required, user.delete)
 
 // router.get('/user/:username', user.getUserByName)
 

@@ -31,7 +31,7 @@ const UserSchema = new Schema({
   hash: String,
   salt: String,
   deleted: { type: Boolean, default: false },
-  bio: String,
+  bio: String, // Short bio about you
   avatar: String,
   // email: { type: String},
   // favorites: [{
@@ -83,9 +83,10 @@ UserSchema.methods.toAuthJSON = function() {
     id: this._id,
     username: this.username,
     email: this.email,
-    token: this.generateJWT(),
     bio: this.bio,
     avatar: this.avatar,
+    deleted: this.deleted,
+    token: this.generateJWT(),
   };
 };
 

@@ -9,12 +9,16 @@ import { Strategy } from 'passport-local'
 // https://www.npmjs.com/package/passport-local
 // https://github.com/passport/express-4.x-local-example/blob/master/server.js
 passport.use(new Strategy(
-  function(username, password, done) {
-    User.findOne({ username }).then(user => {
+  {
+    usernameField: 'email',
+    passwordField: 'password',
+  },
+  function(email, password, done) {
+    User.findOne({ email }).then(user => {
       console.log(user)
       if (!user || !user.verifyPassword(password)) {
         return done(null, false, {
-          errors: {'username or password': 'is invalid'}
+          errors: {'email or password': 'is invalid'}
         })
       }
       return done(null, user)
