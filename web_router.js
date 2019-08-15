@@ -10,13 +10,6 @@ import sign from './controller/sign'
 
 const router = express.Router();
 
-// TEST
-router.get('/', test.index)
-router.get('/test/create', test.create)
-router.post('/test/:id/edit', test.update)
-router.get('/test/:id', test.find)
-router.get('/test', test.index)
-
 // 博文
 router.get('/', topic.index)
 router.get('/topic/create', topic.create)

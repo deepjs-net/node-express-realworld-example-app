@@ -154,7 +154,7 @@ export default {
       error: `user id is necessary`
     })
 
-    console.log(req.payload)
+    // console.log(req.payload)
     if (payload.id !== id) return res.sendStatus(401)
 
     User.findById(id).then(data => {
