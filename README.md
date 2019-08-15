@@ -10,7 +10,7 @@
 
 ## 调试
 
-1. `node --inspect=[127.0.0.1:9229] ./app.js`
+1. `npx babel-node --inspect ./app.js`
 2. chrome 浏览器打开 `chrome://inspect`
 
 也可以使用
@@ -21,6 +21,18 @@
 ```
 
 参考文档: https://nodejs.org/en/docs/guides/debugging-getting-started/
+
+## 部署
+
+```bash
+# 部署 mongodb 服务
+nohup mongod &
+
+
+# 部署 api 服务
+pm2 start app.js --interpreter ./node_modules/@babel/node/bin/babel-node.js
+pm2 delete 0
+```
 
 ## 目标达成
 

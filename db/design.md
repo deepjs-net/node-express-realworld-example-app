@@ -21,11 +21,13 @@ https://cloud.tencent.com/developer/article/1054482
 https://api.github.com/users/cloudyan
 
 - user_id 用户id
-- user_name 用户名
-- nick_name 昵称
+- username 用户名
+- email
+- hash
 - create_at 创建时间 2011-07-13T14:07:57Z
 - update_at 更新时间 2019-07-22T14:29:51Z
-- intro 介绍
+- bio 介绍
+- nickname 昵称
 
 ## topic
 

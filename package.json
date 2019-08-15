@@ -13,7 +13,7 @@
     "dev1": "pm2 start app.js --node-args='--inspect' --watch",
     "dev2": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 app.js",
     "dev3": "node --inspect ./app.js",
-    "dev": "npx babel-node --inspect ./app.js ",
+    "dev": "npx babel-node --inspect ./app.js",
     "test": "node ./test/index.js"
   },
   "repository": {
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/deepjs-net/N-blog#readme",
   "dependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
