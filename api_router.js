@@ -8,7 +8,7 @@ import user from './api/user'
 const router = express.Router();
 
 // 用户 auth.required,
-router.post('/user/create', user.create)
+router.post('/user/register', user.register)
 router.post('/user/login', user.login)
 router.post('/user/logout', user.logout)
 router.get('/user/list', user.getList)

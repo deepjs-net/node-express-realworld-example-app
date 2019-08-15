@@ -1,3 +1,5 @@
+// import { body, oneOf, validationResult } from 'express-validator/check'
+// https://github.com/luffyZh/express-react-scaffold/blob/master/server/routes/user.js
 import passport from '../common/passport'
 import { User } from '../model'
 import { isUnDef, compactObject } from '../utils'
@@ -7,7 +9,7 @@ function getNum() {
 }
 
 export default {
-  create(req, res, next) {
+  register(req, res, next) {
     const {
       username,
       email,
@@ -66,21 +68,26 @@ export default {
     })(req, res, next)
   },
   logout(req, res, next) {
-    // 退出登录可以前端删除 localStorage 中的 token 实现
-    // 本接口实现在服务端删除用户登录状态，删除 session
+    // 采用 token 认证，退出登录实现
+    // - 纯前端实现，删除 localStorage 中的 token 即可
+    // - 服务端实现，重置或清空 token（此 token 会保存在缓存或数据库中）
     const {
       id,
     } = req.body
-    req.session.destroy(function(err) {
-      // cannot access session here
-      console.log(err)
-      return res.json({
-        data: {
-          code: 1,
-          codeText: '注销登录成功',
-        },
-      })
+    return res.json({
+      code: 1,
+      codeText: '可以纯前端实现',
     })
+    // req.session.destroy(function(err) {
+    //   // cannot access session here
+    //   console.log(err)
+    //   return res.json({
+    //     data: {
+    //       code: 1,
+    //       codeText: '注销登录成功',
+    //     },
+    //   })
+    // })
   },
   getOne(req, res, next) {
     const {
@@ -141,13 +148,18 @@ export default {
       password,
       ...rest
     } = req.body
+    const { payload } = req;
 
     if (!id) return res.send({
       error: `user id is necessary`
     })
 
+    console.log(req.payload)
+    if (payload.id !== id) return res.sendStatus(401)
+
     User.findById(id).then(data => {
-      if (!data || data.deleted) return res.sendStatus(404)
+      if (!data) return res.sendStatus(401)
+      if (data.deleted) return res.sendStatus(404)
 
       // only update fields that were actually passed...
       Object.assign(data, compactObject(rest, [undefined]))

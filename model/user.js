@@ -69,13 +69,17 @@ UserSchema.methods.setPassword = function(password){
 UserSchema.methods.generateJWT = function() {
   var today = new Date();
   var exp = new Date(today);
-  exp.setDate(today.getDate() + 60);
+  exp.setDate(today.getDate() + 60); // 时效 60天
 
   return jwt.sign({
     id: this._id,
     username: this.username,
-    exp: parseInt(exp.getTime() / 1000),
+    exp: parseInt(exp.getTime() / 1000), // 授权时效
   }, secret);
+
+  // jwt.sign(tokenObj, secretKey, {
+  //   expiresIn: 86400 * 30, // 授权时效30天
+  // })
 };
 
 UserSchema.methods.toAuthJSON = function() {

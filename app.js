@@ -34,7 +34,7 @@ app.locals._layoutFile = 'layout.html';
 app.locals.blog = {
   title: config.title,
   keywords: config.keywords,
-  description: config.description
+  description: config.description,
 }
 
 // 处理请求数据

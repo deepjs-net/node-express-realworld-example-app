@@ -3,7 +3,7 @@
 基础功能
 
 - user 用户
-  - `POST /user/create`     user.create
+  - `POST /user/register`   user.register
   - `POST /user/login`      user.login
   - `POST /user/logout`     user.logout
   - `GET /user/list`        user.getList

@@ -34,8 +34,8 @@ const config = {
   mongodb: `mongodb://${mongodb.host}:${mongodb.port}/${mongodb.dbname}`,
   log_dir: path.join(__dirname, '../logs'),
   session: {
-    secret: 'nblog',
-    key: 'nblog',
+    key: 'session_id',
+    secret: 'YV:QfJ4aR#^tR$V', // https://randomkeygen.com/
     maxAge: 2592000000, // 86400*30
   },
   auth_cookie_name: 'nblog',
