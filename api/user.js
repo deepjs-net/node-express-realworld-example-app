@@ -82,8 +82,7 @@ export default {
 
     if (id) {
       User.findById(id).then(data => {
-        if (!data) return res.sendStatus(404)
-        if (data.deleted) return res.sendStatus(404)
+        if (!data || data.deleted) return res.sendStatus(404)
 
         res.json({
           data: data.toAuthJSON(),
@@ -99,8 +98,7 @@ export default {
       if (email) query.email = email
 
       User.findOne(query).then(data => {
-        if (!data) return res.sendStatus(404)
-        if (data.deleted) return res.sendStatus(404)
+        if (!data || data.deleted) return res.sendStatus(404)
         res.json({
           data: data.toAuthJSON(),
           // errno: 0, // 默认即成功
@@ -162,8 +160,7 @@ export default {
     })
 
     User.findById(id).then(user => {
-      if (!user) return res.sendStatus(404)
-      // if (user.deleted) return res.sendStatus(404)
+      if (!user || user.deleted) return res.sendStatus(404)
 
       user.deleted = true
 
