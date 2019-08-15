@@ -147,7 +147,7 @@ export default {
     })
 
     User.findById(id).then(data => {
-      if (!data) return res.sendStatus(404)
+      if (!data || data.deleted) return res.sendStatus(404)
 
       // only update fields that were actually passed...
       Object.assign(data, compactObject(rest, [undefined]))
