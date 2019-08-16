@@ -7,15 +7,20 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production pm2 start app.js --name nblog",
+    "build": "npx babel src --out-dir lib",
+    "build:watch": "npx babel src --watch --out-dir lib --ignore view",
+    "start": "cross-env NODE_ENV=production pm2 start ./lib/app.js --name nblog",
     "stop": "cross-env NODE_ENV=production pm2 stop nblog",
     "restart": "npm run stop && npm run start",
-    "dev1": "pm2 start app.js --node-args='--inspect' --watch",
-    "dev2": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 app.js",
-    "dev3": "node --inspect ./app.js",
-    "srart2": "pm2 start app.js --interpreter ./node_modules/@babel/node/bin/babel-node.js",
-    "dev": "npx babel-node --inspect ./app.js",
-    "test": "node ./test/index.js"
+    "dev1": "pm2 start ./lib/app.js --node-args='--inspect' --watch",
+    "dev2": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 ./lib/app.js",
+    "dev3": "node --inspect ./lib/app.js",
+    "srart2": "pm2 start ./src/app.js --interpreter ./node_modules/@babel/node/bin/babel-node.js",
+    "dev": "npx babel-node --inspect ./src/app.js",
+    "dev0": "npm run dev1 && npm run build:watch",
+    "stop1": "pm2 delete 0 --watch",
+    "lint": "eslint './src/**/*.js'",
+    "test": "node ./temp/index.js"
   },
   "repository": {
     "type": "git",
@@ -54,5 +59,16 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.2",
+    "babel-jest": "^24.8.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2"
   }
 }

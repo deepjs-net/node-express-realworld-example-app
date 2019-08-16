@@ -32,6 +32,8 @@ nohup mongod &
 # 部署 api 服务
 pm2 start app.js --interpreter ./node_modules/@babel/node/bin/babel-node.js
 pm2 delete 0
+
+# 如果要使用 watch，可以先编译到 dist，完后 watch 编译到 dist，dist 内使用一般方式实现 watch 监测
 ```
 
 ## 目标达成

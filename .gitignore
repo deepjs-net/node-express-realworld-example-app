@@ -62,3 +62,4 @@ typings/
 
 yarn.lock
 temp
+lib
