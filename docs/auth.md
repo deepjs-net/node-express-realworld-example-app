@@ -59,3 +59,4 @@ const JWT = base64header + "." + base64payload + "." + signature;
 参考
 
 - [Express + JWT用户认证最轻实践](https://juejin.im/post/5b06c6baf265da0db4791805)
+- [JSON Web Token 入门教程](http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html)
