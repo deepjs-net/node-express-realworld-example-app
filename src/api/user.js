@@ -3,6 +3,7 @@
 import passport from '../common/passport'
 import { User } from '../model'
 import { isUnDef, compactObject, filterObject } from '../utils'
+import { pageLimit, pageNum } from './config'
 
 export default {
   getOne(req, res, next) {
@@ -43,26 +44,43 @@ export default {
   },
   getList(req, res, next) {
     // 允许的查询条件
-    const { username, email } = req.body
-    const query = {}
+    let {
+      username,
+      email,
+      page_num = pageNum,
+      page_limit = pageLimit,
+    } = req.body
+    page_num = Number(page_num)
+    page_limit = Number(page_limit)
+    const query = { deleted: false }
     if (username) query.username = username
     if (email) query.email = email
-    User.find(query).then(data => {
-      if (!data) return res.sendStatus(404)
+    const offset = (page_num - 1) * page_limit
+
+    // https://mongoosejs.com/docs/queries.html
+    Promise.all([
+      User.find(query)
+        // .where('deleted').equals(true)
+        .limit(page_limit)
+        .skip(offset)
+        .exec(),
+      User.countDocuments(query)
+    ]).then(([data, count]) => {
       res.json({
         data: {
-          list: data.filter(item => {
-            if (item.deleted) return false
-            return item.toJSON()
-          }),
-          total: data.length,
+          list: data.map(item => item.toJSON()),
+          total_count: count,
+          page_limit,
+          page_num,
+          total_page: Math.ceil(count / page_limit),
+          // has_more: Math.ceil(count / page_limit) > page_num,
         },
         // errno: 0, // 默认即成功
         // errmsg: 'success',
         logid: '',
         timestamp: Date.now(),
       })
-    })
+    }).catch(next)
   },
   create(req, res, next) {
     // nodejs 接收post 请求数据

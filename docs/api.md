@@ -1,6 +1,13 @@
 # Api 设计
 
-基础功能
+## headers
+
+header 头设置
+
+- `Content-Type: application/x-www-form-urlencoded`
+- `Authorization: Bearer {{token}}`
+
+## 基础接口
 
 - user 用户
   - `POST /user/register`   user.register
@@ -17,8 +24,15 @@
   - `GET /topic/list`       topic.getList
   - `POST /topic/update`    topic.update
   - `POST /topic/delete`    topic.delete
+- comment 评论
+  - `POST /comment/create`  comment.create
+  - `GET /comment/info`     comment.getOne
+  - `GET /comment/rawinfo`  comment.getRawOne
+  - `GET /comment/list`     comment.getList
+  - `POST /comment/update`  comment.update
+  - `POST /comment/delete`  comment.delete
 
-增强
+## api 增强
 
 - user
   - `GET /user/followlist` user.getFollowList
@@ -55,7 +69,7 @@
 }
 ```
 
-### Profile
+`/user/profile`
 
 ```json
 {
