@@ -14,7 +14,7 @@ import './db'
 import logger from './common/logger'
 import passport from './common/passport'
 import apiRouter from './api_router'
-import webRouter from './web_router'
+// import webRouter from './web_router'
 
 const app = express()
 const argument = process.argv
@@ -24,9 +24,9 @@ app.proxy = true
 // 静态资源目录
 app.use(express.static(path.join(__dirname, '../public')))
 
-// 模板目录
-app.set('views', path.join(__dirname, 'view'))
-app.set('view engine', 'html')
+// 模板目录(改为前后端分离)
+// app.set('views', path.join(__dirname, 'view'))
+// app.set('view engine', 'html')
 app.engine('html', require('ejs-mate'))
 
 // 设置模板全局常量
@@ -61,7 +61,7 @@ app.use(passport.session()) // 相当于 passport.authenticate('session');
 
 // router 放在 错误请求日志之前 成功日志之后
 app.use('/api', cors(), apiRouter)
-app.use('/', webRouter)
+// app.use('/', webRouter)
 // app.use(function (err, req, res, next) {
 //   debugger;
 //   console.log(11111111);
