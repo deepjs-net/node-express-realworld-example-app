@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
-const Schema = mongoose.Schema
-const ObjectId = Schema.ObjectId
+const { Schema } = mongoose
+const { ObjectId } = Schema.Types
 
 // const Tags = new Schema({
 //   tag: String

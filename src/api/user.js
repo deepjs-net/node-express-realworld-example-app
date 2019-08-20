@@ -116,6 +116,8 @@ export default {
       if (err) return next(err)
 
       if (user) {
+        if (user.deleted) return res.sendStatus(404)
+
         user.token = user.generateJWT()
         return res.json({
           data: user.toAuthJSON()

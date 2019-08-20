@@ -7,8 +7,8 @@ import config from '../config'
 const { secret } = config.session
 // const BaseModel = require('./base_model');
 
-const {Schema} = mongoose
-const {ObjectId} = Schema.Types
+const { Schema } = mongoose
+const { ObjectId } = Schema.Types
 
 const UserSchema = new Schema({
   // user_id: { type: String, required: true },
@@ -129,7 +129,7 @@ UserSchema.index({ email: 1 }, { unique: true })
 // UserSchema.index({githubId: 1});
 // UserSchema.index({accessToken: 1});
 
-UserSchema.pre('save', next => {
+UserSchema.pre('save', function(next) {
   const now = new Date()
   this.update_at = now
   next()
