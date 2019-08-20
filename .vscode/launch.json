@@ -1,0 +1,28 @@
+{
+  // 使用 IntelliSense 了解相关属性。
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "n-log远程调试",
+      "address": "ip",
+      "port": 9229,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "path/index.js",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+      ]
+    },{
+      "type": "node",
+      "request": "launch",
+      "name": "启动程序_n-log",
+      "program": "${workspaceFolder}/index.js",
+      "cwd": "${workspaceRoot}",
+      "env":{"NODE_ENV":"test","NODE_CONFIG_DIR":"config"},
+      "autoAttachChildProcesses": true
+    }
+  ]
+}
