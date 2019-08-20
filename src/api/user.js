@@ -2,7 +2,7 @@
 // https://github.com/luffyZh/express-react-scaffold/blob/master/server/routes/user.js
 import passport from '../common/passport'
 import { User } from '../model'
-import { isUnDef, compactObject } from '../utils'
+import { isUnDef, compactObject, filterObject } from '../utils'
 
 export default {
   getOne(req, res, next) {
@@ -168,6 +168,10 @@ export default {
       if (data.deleted) return res.sendStatus(404)
 
       // only update fields that were actually passed...
+      // 接受修改的字段 filter
+      // 这里做过滤，无效的删除，非白名单的删除
+      const whiteList = ['username', 'email', 'bio', 'avatar']
+      const securityData = filterObject(rest, whiteList)
       Object.assign(data, compactObject(rest, [undefined]))
       if (isUnDef(password)) {
         data.setPassword(password)

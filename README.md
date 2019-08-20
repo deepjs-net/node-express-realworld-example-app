@@ -1,6 +1,8 @@
-# N-blog
+# node-express-realworld-example-app
 
 使用 Express + MongoDB 搭建多人博客
+
+Example Node (Express + Mongoose) codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the RealWorld API spec.
 
 ## debug 测试环境的代码
 

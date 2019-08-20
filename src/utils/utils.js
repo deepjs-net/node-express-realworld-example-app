@@ -17,6 +17,24 @@ export function compactObject(object = {}, invalid = ['', undefined, null]) {
 }
 
 /**
+ * 过滤字段
+ *
+ * @export
+ * @param { Object } [object={}] 对象
+ * @param { Array } [whiteList] 指定过滤数据白名单
+ * @returns { Object } Returns the new object of filtered values.
+ */
+export function filterObject(params, filters) {
+  return Object.keys(params).reduce((obj, key) => {
+    if (filters[key]) {
+      obj[key] = params[key]
+    }
+    return obj
+  }, {})
+}
+
+
+/**
  * sleep
  *
  * @export
@@ -47,7 +65,7 @@ export const randomString =
 // 指定范围，生成随机数
 export function random(size) {
   const result = []
-  while (0 < size--) {
+  while (size-- > 0) {
     result.push(Math.floor(Math.random() * 256))
   }
   return result
@@ -75,7 +93,7 @@ export function uuid(size = 21) {
     bytes = random(size)
     // console.warn(':::uuid random:', bytes.join(','));
   }
-  while (0 < size--) {
+  while (size-- > 0) {
     id += url[bytes[size] & 63]
   }
   return id

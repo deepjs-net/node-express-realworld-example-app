@@ -63,3 +63,4 @@ typings/
 yarn.lock
 temp
 lib
+dist/
