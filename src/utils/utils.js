@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 /**
  * 清除无效数据
  *
@@ -74,9 +76,9 @@ export function random(size) {
 export function randomRange(under, over) {
   switch (arguments.length) {
     case 1:
-      return parseInt(Math.random() * under + 1)
+      return parseInt(Math.random() * under + 1, 10)
     case 2:
-      return parseInt(Math.random() * (over - under + 1) + under)
+      return parseInt(Math.random() * (over - under + 1) + under, 10)
     default:
       return 0
   }
@@ -94,6 +96,7 @@ export function uuid(size = 21) {
     // console.warn(':::uuid random:', bytes.join(','));
   }
   while (size-- > 0) {
+    /* eslint no-bitwise: 0 */
     id += url[bytes[size] & 63]
   }
   return id
