@@ -19,10 +19,12 @@ router.put('/user/update', auth.required, user.update)
 router.delete('/user/delete', auth.required, user.delete)
 
 // 文章
+// router.param('slug', topic.paramSlug)
 router.get('/topic/list', topic.getList)
+router.get('/topic/feed', auth.required, topic.getList)
 router.get('/topic/info', topic.common, topic.getOne)
 router.get('/topic/rawinfo', auth.required, topic.common, topic.getRawOne)
-router.post('/topic/create', auth.required, topic.common, topic.create)
+router.post('/topic/create', auth.required, topic.create)
 router.put('/topic/update', auth.required, topic.common, topic.update)
 router.delete('/topic/delete', auth.required, topic.common, topic.delete)
 

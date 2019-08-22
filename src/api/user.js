@@ -6,38 +6,91 @@ import { isUnDef, compactObject, filterObject } from '../utils'
 import { pageLimitDefault } from './config'
 
 export default {
-  getOne(req, res, next) {
+  // 新建用户
+  create(req, res, next) {
+    // nodejs 接收post 请求数据
+    // https://segmentfault.com/q/1010000003043380
+    // https://blog.csdn.net/HaoDaWang/article/details/53024122
+    // https://www.cnblogs.com/chyingp/p/nodejs-learning-express-body-parser.html
     const {
-      id,
       username,
       email,
+      password,
     } = req.body
-    const authId = req.payload && req.payload.id
 
-    function getUser() {
-      if (id) {
-        return User.findById(id)
-      } else {
-        const query = {}
-        if (username) query.username = username
-        if (email) query.email = email
-        return User.findOne(query)
-      }
+    const user = new User()
+
+    user.email = email
+    user.username = username
+    user.setPassword(password)
+
+    user.save().then(() => {
+      // express中 res.json( )和 res.send( )
+      // https://blog.csdn.net/starter_____/article/details/79068894
+      return res.json({
+        data: {
+          user: user.toAuthJSON(true)
+        },
+      })
+    }).catch(next)
+  },
+
+  // 登录
+  login(req, res, next) {
+    const { email, password } = req.body
+
+    if (!email) {
+      return res.status(422).json({
+        data: {
+          email: `can't be blank`
+        },
+      })
+    }
+    if (!password) {
+      return res.status(422).json({
+        data: {
+          password: `can't be blank`
+        },
+      })
     }
 
-    getUser().then(data => {
-      if (!data) return res.sendStatus(404)
+    passport.authenticate('local', { session: false }, function (err, user, info) {
+      if (err) return next(err)
 
-      res.json({
-        // TODO: 这里不应该得到 token，而是是否包含隐私信息 如 email
-        data: authId === data.id ? data.toAuthJSON() : data.toJSON(),
-        // errno: 0, // 默认即成功
-        // errmsg: 'success',
-        logid: '',
-        timestamp: Date.now(),
-      })
-    })
+      if (user) {
+        user.token = user.generateJWT()
+        return res.json({
+          data: user.toAuthJSON(true),
+        })
+      } else {
+        return res.status(422).json(info)
+      }
+    })(req, res, next)
   },
+
+  // 注销登录
+  logout(req, res, next) {
+    // 采用 token 认证，退出登录实现
+    // - 纯前端实现，删除 localStorage 中的 token 即可
+    // - 服务端实现，重置或清空 token（此 token 会保存在缓存或数据库中）
+    const { id } = req.body
+    return res.json({
+      code: 1,
+      codeText: '可以纯前端实现',
+    })
+    // req.session.destroy(function(err) {
+    //   // cannot access session here
+    //   console.log(err)
+    //   return res.json({
+    //     data: {
+    //       code: 1,
+    //       codeText: '注销登录成功',
+    //     },
+    //   })
+    // })
+  },
+
+  // 返回用户列表
   getList(req, res, next) {
     // 允许的查询条件
     const { username, email } = req.body
@@ -65,11 +118,11 @@ export default {
     ]).then(([data, count]) => {
       res.json({
         data: {
-          list: data.map(item => item.toJSON()),
+          list: data.map(item => item.toAuthJSON()),
           total_count: count,
           page_num: pageNum,
           page_limit: pageLimit,
-          totalPage: Math.ceil(count / pageLimit),
+          total_page: Math.ceil(count / pageLimit),
           // has_more: Math.ceil(count / pageLimit) > pageNum,
         },
         // errno: 0, // 默认即成功
@@ -79,95 +132,52 @@ export default {
       })
     }).catch(next)
   },
-  create(req, res, next) {
-    // nodejs 接收post 请求数据
-    // https://segmentfault.com/q/1010000003043380
-    // https://blog.csdn.net/HaoDaWang/article/details/53024122
-    // https://www.cnblogs.com/chyingp/p/nodejs-learning-express-body-parser.html
-    const {
-      username,
-      email,
-      password,
-    } = req.body
 
-    const user = new User()
-
-    user.email = email
-    user.username = username
-    user.setPassword(password)
-
-    user.save().then(() => {
-      // express中 res.json( )和 res.send( )
-      // https://blog.csdn.net/starter_____/article/details/79068894
-      return res.json({
-        data: {
-          user: user.toAuthJSON()
-        },
-      })
-    }).catch(next)
-  },
-  login(req, res, next) {
-    const { email, password } = req.body
-
-    if (!email) {
-      return res.status(422).json({
-        data: {
-          email: `can't be blank`
-        },
-      })
-    }
-    if (!password) {
-      return res.status(422).json({
-        data: {
-          password: `can't be blank`
-        },
-      })
-    }
-
-    passport.authenticate('local', { session: false }, function (err, user, info) {
-      if (err) return next(err)
-
-      if (user) {
-        user.token = user.generateJWT()
-        return res.json({
-          data: user.toAuthJSON()
-        })
-      } else {
-        return res.status(422).json(info)
-      }
-    })(req, res, next)
-  },
-  logout(req, res, next) {
-    // 采用 token 认证，退出登录实现
-    // - 纯前端实现，删除 localStorage 中的 token 即可
-    // - 服务端实现，重置或清空 token（此 token 会保存在缓存或数据库中）
-    const { id } = req.body
-    return res.json({
-      code: 1,
-      codeText: '可以纯前端实现',
-    })
-    // req.session.destroy(function(err) {
-    //   // cannot access session here
-    //   console.log(err)
-    //   return res.json({
-    //     data: {
-    //       code: 1,
-    //       codeText: '注销登录成功',
-    //     },
-    //   })
-    // })
-  },
-
-  update(req, res, next) {
+  // 返回用户信息
+  getOne(req, res, next) {
     const {
       id,
-      password,
-      ...rest
+      username,
+      email,
     } = req.body
-    const authId = req.payload.id
+    // req.body 默认为 {}, req.payload 默认为 undefined
+    const authId = req.payload && req.payload.id
+
+    function getone() {
+      if (id) {
+        return User.findById(id)
+      } else {
+        const query = {}
+        if (username) query.username = username
+        if (email) query.email = email
+        return User.findOne(query)
+      }
+    }
+
+    getone().then(data => {
+      if (!data) return res.sendStatus(404)
+
+      res.json({
+        // TODO: 这里不应该得到 token(只在 login以及更新用户信息后 返回)，而是返回用户基本信息
+        // 判断是否包含非公开信息
+        // data: authId === data.id ? data.toProfileJSON() : data.toPublicJSON(),
+        data: data.toAuthJSON(authId === data.id),
+        // errno: 0, // 默认即成功
+        // errmsg: 'success',
+        logid: '',
+        timestamp: Date.now(),
+      })
+    })
+  },
+
+  // 更新用户信息
+  update(req, res, next) {
+    const { id, password, ...rest } = req.body
+    const authId = req.payload && req.payload.id
 
     if (!id) return res.send({
-      error: `user id is necessary`
+      errno: 404100,
+      errmsg: `query params id is necessary`,
     })
 
     // console.log(req.payload)
@@ -194,10 +204,12 @@ export default {
       })
     }).catch(next)
   },
+
+  // 删除用户
   delete(req, res, next) {
     // 必先校验用户
     const userId = req.body.id
-    const authId = req.payload.id
+    const authId = req.payload && req.payload.id
 
     if (!userId) return res.send({
       errno: 404100,
@@ -211,9 +223,9 @@ export default {
 
       return data.delete(authId).then(function(){
         return res.json({
+          data: data.toPublicJSON(),
           errno: 0,
           errmsg: '删除成功',
-          data: data.toJSON(),
         })
       })
     })

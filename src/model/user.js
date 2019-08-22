@@ -6,8 +6,6 @@ import softDelete from 'mongoose-delete'
 // import BaseModel  from './base.model'
 import config from '../config'
 
-// console.log(11)
-
 const { secret } = config.session
 
 const { Schema } = mongoose
@@ -92,27 +90,19 @@ UserSchema.methods.generateJWT = function() {
   // })
 }
 
-UserSchema.methods.toAuthJSON = function() {
-  return {
+UserSchema.methods.toAuthJSON = function(authorized) {
+  const user = {
     id: this._id,
     username: this.username,
     email: this.email,
     bio: this.bio,
     avatar: this.avatar,
-    deleted: this.deleted,
-    token: this.generateJWT(),
+    // deleted: this.deleted,
   }
-}
-
-UserSchema.methods.toJSON = function() {
-  return {
-    id: this._id,
-    username: this.username,
-    email: this.email,
-    bio: this.bio,
-    avatar: this.avatar,
-    deleted: this.deleted,
+  if (authorized) {
+    user.token = this.generateJWT()
   }
+  return user
 }
 
 UserSchema.methods.toProfileJSONFor = function(user) {
@@ -120,8 +110,7 @@ UserSchema.methods.toProfileJSONFor = function(user) {
     email: this.email,
     username: this.username,
     bio: this.bio,
-    avatar:
-      this.avatar || '/img/avatar-default.jpg',
+    avatar: this.avatar || '/img/avatar-default.jpg',
   }
 }
 

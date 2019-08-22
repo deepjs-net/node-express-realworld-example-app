@@ -16,9 +16,9 @@ const TopicSchema = new Schema({
   title: { type: String },
   desc: { type: String },
   content: { type: String },
-  author_id: { type: ObjectId, ref: 'user' },
-  // tags: [{ type: ObjectId, ref: 'tag' }],
-  // comments: [{ type: ObjectId, ref: 'comment' }],
+  author: { type: ObjectId, ref: 'User' },
+  // tags: [{ type: ObjectId, ref: 'Tag' }],
+  // comments: [{ type: ObjectId, ref: 'Comment' }],
   // top: { type: Boolean, default: false }, // 置顶帖
   // good: {type: Boolean, default: false}, // 精华帖
   // lock: {type: Boolean, default: false}, // 被锁定主题
@@ -50,19 +50,20 @@ TopicSchema.methods.slugify = async function() {
     from: 'zh-CN',
     to: 'en',
   })
-  console.log(translate)
+  // const translate = { result: [ 'title' ] }
+  // console.log(translate)
   /* eslint no-bitwise: 0 */
   this.slug = slug(translate.result.join( ).toLowerCase()) + '-' + (Math.random() * (36 ** 6) | 0).toString(36)
 }
 
 TopicSchema.methods.toJSONFor = function(user) {
   return {
+    id: this._id,
     slug: this.slug,
     title: this.title,
     desc: this.desc,
     content: this.content,
-    author_id: user.id,
-    // author: user.toProfileJSONFor(),
+    author: this.author.toProfileJSONFor(user),
     create_at: this.create_at,
     update_at: this.update_at,
   }

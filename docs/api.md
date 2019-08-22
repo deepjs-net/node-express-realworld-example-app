@@ -54,6 +54,7 @@ header 头设置
 - topic 文章/话题
   - `POST /topic/create`    topic.create
   - `GET /topic/list`       topic.getList 支持分页，筛选
+  - `GET /topic/feed`       topic.getFeed 订阅
   - `GET /topic/info`       topic.getOne
   - `GET /topic/rawinfo`    topic.getRawOne 原始文档
   - `POST /topic/update`    topic.update

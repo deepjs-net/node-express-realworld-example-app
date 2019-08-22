@@ -35,7 +35,7 @@ https://api.github.com/users/cloudyan
 ## topic
 
 - title 标题
-- author_id 作者
+- author 作者
 - desc 描述
 - content 正文
 - views_count 浏览数
@@ -63,3 +63,11 @@ https://api.github.com/users/cloudyan
 
 - https://cloud.tencent.com/developer/article/1054482
 - https://www.jianshu.com/p/7e60dbd59138
+- MongoDB 数据库引用（手动引用 vs DBRefs）
+  - https://www.runoob.com/mongodb/mongodb-database-references.html
+  - https://mongoosejs.com/docs/populate.html
+  - https://segmentfault.com/a/1190000002727265
+
+扩展阅读
+
+- https://www.ruanyifeng.com/blog/2014/07/database_implementation.html

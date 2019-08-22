@@ -1,24 +1,46 @@
 import { Topic, User } from '../model'
 import { isUnDef, compactObject, filterObject } from '../utils'
+import { pageLimitDefault } from './config'
 
 export default {
-  common(req, res, next, slug) {
-    Topic.findOne({ slug })
-      // .populate('author')
+  // 公共方法
+  common(req, res, next) {
+    const { id, ...rest } = req.body
+    console.log(req.body)
+    // const authId = req.payload && req.payload.id
+
+    function getone() {
+      if (id) {
+        console.log(111)
+        return Topic.findById(id)
+      } else {
+        console.log(222)
+        return Topic.findOne(rest)
+      }
+    }
+
+    console.log(getone().populate('author').exec())
+
+    getone().populate('author')
       .then(data => {
+        console.log('common')
         if (!data) return res.sendStatus(404)
 
         req.topic = data
+        console.log('topic', req.topic)
+        return next()
       }).catch(next)
   },
+
+  // 创建一篇文章
   create(req, res, next) {
-    const authId = req.payload.id
+    const authId = req.payload && req.payload.id
 
     User.findById(authId).then(user => {
       if (!user) return res.sendStatus(401)
 
       const data = new Topic(req.body)
-      data.author_id = user.id
+      data.author = user
 
       return data.save().then(() => {
         return res.json({
@@ -27,95 +49,174 @@ export default {
       })
     }).catch(next)
   },
-  getRawOne(req, res, next) {
-    const { id } = req.body
-    if (!id) return res.send({
-      errno: 404100,
-      errmsg: `query params id is necessary`,
-    })
 
-    Topic.findById(id).then(data => {
-      if (!data || data.deleted) return res.sendStatus(404)
-
-      res.json({
-        data,
-        // errno: 0, // 默认即成功
-        // errmsg: 'success',
-        logid: '',
-        timestamp: Date.now(),
-      })
-    })
-  },
-  getOne(req, res, next) {
-    const { id } = req.body
-    if (!id) return res.send({
-      errno: 404100,
-      errmsg: `query params id is necessary`,
-    })
-
-    Topic.findById(id).then(data => {
-      if (!data || data.deleted) return res.sendStatus(404)
-
-      res.json({
-        data,
-        // errno: 0, // 默认即成功
-        // errmsg: 'success',
-        logid: '',
-        timestamp: Date.now(),
-      })
-    })
-  },
+  // 返回文章列表
   getList(req, res, next) {
     // 允许的查询条件
-    const { title, tag } = req.body
     const query = {}
-    if (title) query.title = title
-    if (tag) query.tag = tag
-    Topic.find(query).then(data => {
-      if (!data) return res.sendStatus(404)
-      res.json({
-        data: {
-          list: data.filter(item => {
-            if (item.deleted) return false
-            return item
-          }),
-        },
-        // errno: 0, // 默认即成功
-        // errmsg: 'success',
-        logid: '',
-        timestamp: Date.now(),
-      })
+    const { keyword, tags, author, favorited } = req.body
+    const authId = req.payload && req.payload.id
+
+    Promise.all([
+      author ? User.findOne(author) : null,
+    ]).then(([user]) => {
+      if (user) query.author = user._id
+      let {
+        pageNum = 1,
+        pageLimit = pageLimitDefault,
+      } = req.body
+
+      pageNum = Number(pageNum)
+      pageLimit = Number(pageLimit)
+      const offset = (pageNum - 1) * pageLimit
+
+      Promise.all([
+        Topic.find(query)
+          .limit(pageLimit)
+          .skip(offset)
+          .sort({createdAt: 'desc'})
+          .populate('author')
+          .exec(),
+        Topic.countDocuments(query).exec(),
+        authId ? User.findById(authId) : null,
+      ]).then(([data, count, authuser]) => {
+        res.json({
+          data: {
+            list: data.map(item => item.toJSONFor(authuser)),
+            total_count: count,
+            page_num: pageNum,
+            page_limit: pageLimit,
+            total_page: Math.ceil(count / pageLimit),
+            // has_more: Math.ceil(count / pageLimit) > pageNum,
+          },
+          errno: 0,
+          errmsg: 'success',
+          logid: '',
+          timestamp: Date.now(),
+        })
+      }).catch(next)
+
     })
   },
-  update(req, res, next) {
-    const { id, ...rest } = req.body
 
-    if (!id) return res.send({
+  // 返回订阅列表
+  getFeed(req, res, next) {
+    let {
+      pageNum = 1,
+      pageLimit = pageLimitDefault,
+    } = req.body
+    const authId = req.payload && req.payload.id
+
+    pageNum = Number(pageNum)
+    pageLimit = Number(pageLimit)
+
+    const offset = (pageNum - 1) * pageLimit
+
+    User.findById(authId).then(user => {
+      if (!user) return res.sendStatus(401)
+
+      const query = {
+        author: { $in: user.following }
+      }
+      // https://mongoosejs.com/docs/queries.html
+      Promise.all([
+        Topic.find(query)
+          .limit(pageLimit)
+          .skip(offset)
+          .populate('author')
+          .exec(),
+        User.countDocuments(query)
+      ]).then(([data, count]) => {
+        res.json({
+          data: {
+            list: data.map(item => item.toJSONFor(user)),
+            total_count: count,
+            page_num: pageNum,
+            page_limit: pageLimit,
+            total_page: Math.ceil(count / pageLimit),
+            // has_more: Math.ceil(count / pageLimit) > pageNum,
+          },
+          errno: 0,
+          errmsg: 'success',
+          logid: '',
+          timestamp: Date.now(),
+        })
+      }).catch(next)
+    })
+  },
+
+  // 返回原始内容
+  getRawOne(req, res, next) {
+    const query = req.body
+    const authId = req.payload && req.payload.id
+
+    if (!query.id) return res.send({
       errno: 404100,
       errmsg: `query params id is necessary`,
     })
 
-    // console.log(req.payload)
-    // if (payload.id !== id) return res.sendStatus(401)
-
-    Topic.findById(id).then(data => {
-      if (!data) return res.sendStatus(401)
-      if (data.deleted) return res.sendStatus(404)
-
-      // only update fields that were actually passed...
-      Object.assign(data, compactObject(rest, [undefined]))
-
-      return data.save().then(function(){
-        return res.json({
-          data,
-        })
+    // 填充用户信息
+    Promise.all([
+      req.payload ? User.findById(authId) : null,
+      // execPopulate 填充多个不同的查询
+      // https://codeday.me/bug/20171114/96273.html
+      req.topic.populate('author').execPopulate(),
+    ]).then(([ user ]) => {
+      return res.json({
+        data: req.topic.toJSONFor(user),
       })
     }).catch(next)
   },
+
+  // 返回格式化内容
+  getOne(req, res, next) {
+    // 填充用户信息
+    Promise.all([
+      req.payload ? User.findById(authId) : null,
+      req.topic.populate('author').execPopulate(),
+    ]).then(([ user ]) => {
+      return res.json({
+        data: req.topic.toJSONFor(user),
+      })
+    }).catch(next)
+  },
+
+  // 更新文章
+  update(req, res, next) {
+    const { id: topicId, ...rest } = req.body
+    const authId = req.payload && req.payload.id
+    const { topic } = req
+
+    if (!topicId) return res.send({
+      errno: 404100,
+      errmsg: `query params id is necessary`,
+    })
+
+    // if (payload.id !== id) return res.sendStatus(401)
+    User.findById(authId).then(user => {
+      if (!user) return res.sendStatus(401)
+
+      // 统一处理文章，结果挂载到 req.topic 上
+      if (topic.author._id.toString() !== authId) {
+        return res.sendStatus(403)
+      }
+
+      // only update fields that were actually passed...
+      Object.assign(topic, compactObject(rest, ['title', 'desc', 'content']))
+
+      return topic.save().then((newTopic) => {
+        return res.json({
+          data: newTopic.toJSONFor(user),
+        })
+      }).catch(next)
+    })
+  },
+
+  // 删除文章
   delete(req, res, next) {
     // 必先校验用户
     const topicId = req.body.id
-    const authId = req.payload.id
+    const authId = req.payload && req.payload.id
 
     if (!topicId) return res.send({
       errno: 404100,
@@ -125,8 +226,8 @@ export default {
     User.findById(authId).then(user => {
       if (!user) return res.sendStatus(401)
 
-      // 统一处理文章，结果挂载到 req.topic 上
-      if (req.topic.authorId.toString() !== authId) {
+      // 统一处理后，文章挂载在 req.topic 上
+      if (req.topic.author._id.toString() !== authId) {
         return res.sendStatus(403)
       }
 
