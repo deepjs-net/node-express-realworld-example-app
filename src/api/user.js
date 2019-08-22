@@ -180,7 +180,6 @@ export default {
       errmsg: `query params id is necessary`,
     })
 
-    // console.log(req.payload)
     if (authId !== id) return res.sendStatus(401)
 
     User.findById(id).then(data => {

@@ -12,6 +12,7 @@ const { Schema } = mongoose
 const { ObjectId } = Schema.Types
 
 const UserSchema = new Schema({
+  // 六位自增 100000 可以使用 findAndModify(原子操作)来保证序列唯一(某个表存id，取此数据无则新建，有则 +1 $inc)
   // user_id: { type: String, required: true },
   username: {
     type: String,

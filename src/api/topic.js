@@ -6,28 +6,22 @@ export default {
   // 公共方法
   common(req, res, next) {
     const { id, ...rest } = req.body
-    console.log(req.body)
     // const authId = req.payload && req.payload.id
 
     function getone() {
       if (id) {
-        console.log(111)
         return Topic.findById(id)
       } else {
-        console.log(222)
         return Topic.findOne(rest)
       }
     }
 
-    console.log(getone().populate('author').exec())
-
     getone().populate('author')
       .then(data => {
-        console.log('common')
         if (!data) return res.sendStatus(404)
 
         req.topic = data
-        console.log('topic', req.topic)
+
         return next()
       }).catch(next)
   },
@@ -116,7 +110,7 @@ export default {
       if (!user) return res.sendStatus(401)
 
       const query = {
-        author: { $in: user.following }
+        // author: { $in: user.following }
       }
       // https://mongoosejs.com/docs/queries.html
       Promise.all([
