@@ -7,7 +7,7 @@ import user from './api/user'
 const router = express.Router()
 
 // 用户 auth.required,
-router.post('/user/signup', user.create)
+router.post('/user/create', user.create)
 router.post('/user/login', user.login)
 router.post('/user/logout', user.logout)
 router.get('/user/list', user.getList)
@@ -20,11 +20,11 @@ router.delete('/user/delete', auth.required, user.delete)
 
 // 文章
 router.get('/topic/list', topic.getList)
-router.get('/topic/info', topic.getOne)
-router.get('/topic/rawinfo', topic.getRawOne)
-router.post('/topic/create', topic.create)
-router.put('/topic/update', topic.update)
-router.delete('/topic/delete', topic.delete)
+router.get('/topic/info', topic.common, topic.getOne)
+router.get('/topic/rawinfo', auth.required, topic.common, topic.getRawOne)
+router.post('/topic/create', auth.required, topic.common, topic.create)
+router.put('/topic/update', auth.required, topic.common, topic.update)
+router.delete('/topic/delete', auth.required, topic.common, topic.delete)
 
 router.use(function(err, req, res, next) {
   if (err.name === 'ValidationError') {

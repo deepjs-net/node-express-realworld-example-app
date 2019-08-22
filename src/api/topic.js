@@ -1,27 +1,31 @@
-import { Topic } from '../model'
-import { isUnDef, compactObject } from '../utils'
-
+import { Topic, User } from '../model'
+import { isUnDef, compactObject, filterObject } from '../utils'
 
 export default {
+  common(req, res, next, slug) {
+    Topic.findOne({ slug })
+      // .populate('author')
+      .then(data => {
+        if (!data) return res.sendStatus(404)
+
+        req.topic = data
+      }).catch(next)
+  },
   create(req, res, next) {
-    const {
-      title,
-      desc,
-      content,
-    } = req.body
+    const authId = req.payload.id
 
-    const data = new Topic()
+    User.findById(authId).then(user => {
+      if (!user) return res.sendStatus(401)
 
-    data.save().then(() => {
-      // express中 res.json( )和 res.send( )
-      // https://blog.csdn.net/starter_____/article/details/79068894
-      return res.json({
-        data,
+      const data = new Topic(req.body)
+      data.author_id = user.id
+
+      return data.save().then(() => {
+        return res.json({
+          data: data.toJSONFor(user),
+        })
       })
-    }).catch(err => {
-      // console.log(err)
-      next(err)
-    })
+    }).catch(next)
   },
   getRawOne(req, res, next) {
     const { id } = req.body
@@ -109,25 +113,25 @@ export default {
     }).catch(next)
   },
   delete(req, res, next) {
-    const { id } = req.body
+    // 必先校验用户
+    const topicId = req.body.id
+    const authId = req.payload.id
 
-    if (!id) return res.send({
+    if (!topicId) return res.send({
       errno: 404100,
-      errmsg: `query params id is necessary`,
+      errmsg: `data id is necessary`,
     })
 
-    Topic.findById(id).then(data => {
-      if (!data || data.deleted) return res.sendStatus(404)
+    User.findById(authId).then(user => {
+      if (!user) return res.sendStatus(401)
 
-      data.deleted = true
+      // 统一处理文章，结果挂载到 req.topic 上
+      if (req.topic.authorId.toString() !== authId) {
+        return res.sendStatus(403)
+      }
 
-      return data.save().then(function(){
-        return res.json({
-          data: {
-            code: 1,
-            codeText: '删除成功',
-          },
-        })
+      return req.topic.delete(authId).then(() => {
+        return res.sendStatus(204)
       })
     })
   },

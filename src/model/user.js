@@ -2,10 +2,13 @@ import mongoose from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
+import softDelete from 'mongoose-delete'
+// import BaseModel  from './base.model'
 import config from '../config'
 
+// console.log(11)
+
 const { secret } = config.session
-// const BaseModel = require('./base_model');
 
 const { Schema } = mongoose
 const { ObjectId } = Schema.Types
@@ -53,7 +56,7 @@ const UserSchema = new Schema({
   update_at: { type: Date, default: Date.now },
 })
 
-// UserSchema.plugin(BaseModel);
+UserSchema.plugin(softDelete, { indexFields: 'all', overrideMethods: 'all' })
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' })
 
 UserSchema.methods.verifyPassword = function(password) {
@@ -114,12 +117,11 @@ UserSchema.methods.toJSON = function() {
 
 UserSchema.methods.toProfileJSONFor = function(user) {
   return {
+    email: this.email,
     username: this.username,
     bio: this.bio,
     avatar:
-      this.avatar ||
-      'https://static.productionready.io/images/smiley-cyrus.jpg',
-    // following: user ? user.isFollowing(this._id) : false
+      this.avatar || '/img/avatar-default.jpg',
   }
 }
 

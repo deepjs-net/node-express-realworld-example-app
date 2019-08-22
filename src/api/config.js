@@ -1,2 +1,1 @@
-export const pageLimit = 20
-export const pageNum = 1
+export const pageLimitDefault = 20

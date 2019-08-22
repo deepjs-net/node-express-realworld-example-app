@@ -3,7 +3,7 @@
 import passport from '../common/passport'
 import { User } from '../model'
 import { isUnDef, compactObject, filterObject } from '../utils'
-import { pageLimit, pageNum } from './config'
+import { pageLimitDefault } from './config'
 
 export default {
   getOne(req, res, next) {
@@ -12,56 +12,53 @@ export default {
       username,
       email,
     } = req.body
+    const authId = req.payload && req.payload.id
 
-    if (id) {
-      User.findById(id).then(data => {
-        if (!data || data.deleted) return res.sendStatus(404)
-
-        res.json({
-          data: data.toAuthJSON(),
-          // errno: 0, // 默认即成功
-          // errmsg: 'success',
-          logid: '',
-          timestamp: Date.now(),
-        })
-      })
-    } else {
-      const query = {}
-      if (username) query.username = username
-      if (email) query.email = email
-
-      User.findOne(query).then(data => {
-        if (!data || data.deleted) return res.sendStatus(404)
-        res.json({
-          data: data.toAuthJSON(),
-          // errno: 0, // 默认即成功
-          // errmsg: 'success',
-          logid: '',
-          timestamp: Date.now(),
-        })
-      })
+    function getUser() {
+      if (id) {
+        return User.findById(id)
+      } else {
+        const query = {}
+        if (username) query.username = username
+        if (email) query.email = email
+        return User.findOne(query)
+      }
     }
+
+    getUser().then(data => {
+      if (!data) return res.sendStatus(404)
+
+      res.json({
+        // TODO: 这里不应该得到 token，而是是否包含隐私信息 如 email
+        data: authId === data.id ? data.toAuthJSON() : data.toJSON(),
+        // errno: 0, // 默认即成功
+        // errmsg: 'success',
+        logid: '',
+        timestamp: Date.now(),
+      })
+    })
   },
   getList(req, res, next) {
     // 允许的查询条件
+    const { username, email } = req.body
     let {
-      username,
-      email,
-      page_num = pageNum,
-      page_limit = pageLimit,
+      pageNum = 1,
+      pageLimit = pageLimitDefault,
     } = req.body
-    page_num = Number(page_num)
-    page_limit = Number(page_limit)
-    const query = { deleted: false }
+
+    pageNum = Number(pageNum)
+    pageLimit = Number(pageLimit)
+
+    const query = { }
     if (username) query.username = username
     if (email) query.email = email
-    const offset = (page_num - 1) * page_limit
+    const offset = (pageNum - 1) * pageLimit
 
     // https://mongoosejs.com/docs/queries.html
     Promise.all([
       User.find(query)
-        // .where('deleted').equals(true)
-        .limit(page_limit)
+        // .where('deleted').equals(true) // 使用 mongoose-delete
+        .limit(pageLimit)
         .skip(offset)
         .exec(),
       User.countDocuments(query)
@@ -70,10 +67,10 @@ export default {
         data: {
           list: data.map(item => item.toJSON()),
           total_count: count,
-          page_limit,
-          page_num,
-          total_page: Math.ceil(count / page_limit),
-          // has_more: Math.ceil(count / page_limit) > page_num,
+          page_num: pageNum,
+          page_limit: pageLimit,
+          totalPage: Math.ceil(count / pageLimit),
+          // has_more: Math.ceil(count / pageLimit) > pageNum,
         },
         // errno: 0, // 默认即成功
         // errmsg: 'success',
@@ -107,10 +104,7 @@ export default {
           user: user.toAuthJSON()
         },
       })
-    }).catch(err => {
-      // console.log(err)
-      next(err)
-    })
+    }).catch(next)
   },
   login(req, res, next) {
     const { email, password } = req.body
@@ -130,12 +124,10 @@ export default {
       })
     }
 
-    passport.authenticate('local', {session: false}, function (err, user, info) {
+    passport.authenticate('local', { session: false }, function (err, user, info) {
       if (err) return next(err)
 
       if (user) {
-        if (user.deleted) return res.sendStatus(404)
-
         user.token = user.generateJWT()
         return res.json({
           data: user.toAuthJSON()
@@ -172,18 +164,18 @@ export default {
       password,
       ...rest
     } = req.body
-    const { payload } = req
+    const authId = req.payload.id
 
     if (!id) return res.send({
       error: `user id is necessary`
     })
 
     // console.log(req.payload)
-    if (payload.id !== id) return res.sendStatus(401)
+    if (authId !== id) return res.sendStatus(401)
 
     User.findById(id).then(data => {
       if (!data) return res.sendStatus(401)
-      if (data.deleted) return res.sendStatus(404)
+      // if (data.deleted) return res.sendStatus(404)
 
       // only update fields that were actually passed...
       // 接受修改的字段 filter
@@ -203,25 +195,25 @@ export default {
     }).catch(next)
   },
   delete(req, res, next) {
-    const { id } = req.body
+    // 必先校验用户
+    const userId = req.body.id
+    const authId = req.payload.id
 
-    if (!id) return res.send({
+    if (!userId) return res.send({
       errno: 404100,
       errmsg: `data id is necessary`,
     })
 
-    User.findById(id).then(data => {
-      if (!data || data.deleted) return res.sendStatus(404)
+    // 校验 auth 权限
+    if (authId !== userId) return res.sendStatus(401)
+    User.findById(authId).then(data => {
+      if (!data) return res.sendStatus(404)
 
-      data.deleted = true
-
-      return data.save().then(function(){
+      return data.delete(authId).then(function(){
         return res.json({
           errno: 0,
           errmsg: '删除成功',
-          data: {
-            id: data.toJSON(),
-          },
+          data: data.toJSON(),
         })
       })
     })
