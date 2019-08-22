@@ -164,6 +164,8 @@ export default {
 
   // 返回格式化内容
   getOne(req, res, next) {
+    const authId = req.payload && req.payload.id
+
     // 填充用户信息
     Promise.all([
       req.payload ? User.findById(authId) : null,
