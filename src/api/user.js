@@ -3,67 +3,10 @@
 import passport from '../common/passport'
 import { User } from '../model'
 import { isUnDef, compactObject, filterObject } from '../utils'
+import { pageLimitDefault } from './config'
 
 export default {
-  getOne(req, res, next) {
-    const {
-      id,
-      username,
-      email,
-    } = req.body
-
-    if (id) {
-      User.findById(id).then(data => {
-        if (!data || data.deleted) return res.sendStatus(404)
-
-        res.json({
-          data: data.toAuthJSON(),
-          // errno: 0, // 默认即成功
-          // errmsg: 'success',
-          logid: '',
-          timestamp: Date.now(),
-        })
-      })
-    } else {
-      const query = {}
-      if (username) query.username = username
-      if (email) query.email = email
-
-      User.findOne(query).then(data => {
-        if (!data || data.deleted) return res.sendStatus(404)
-        res.json({
-          data: data.toAuthJSON(),
-          // errno: 0, // 默认即成功
-          // errmsg: 'success',
-          logid: '',
-          timestamp: Date.now(),
-        })
-      })
-    }
-  },
-  getList(req, res, next) {
-    // 允许的查询条件
-    const { username, email } = req.body
-    const query = {}
-    if (username) query.username = username
-    if (email) query.email = email
-    User.find(query).then(data => {
-      if (!data) return res.sendStatus(404)
-      res.json({
-        data: {
-          list: data.filter(item => {
-            if (item.deleted) return false
-            return item.toJSON()
-          }),
-          total: data.length,
-        },
-        // errno: 0, // 默认即成功
-        // errmsg: 'success',
-        logid: '',
-        timestamp: Date.now(),
-      })
-    })
-  },
+  // 新建用户
   create(req, res, next) {
     // nodejs 接收post 请求数据
     // https://segmentfault.com/q/1010000003043380
@@ -86,14 +29,13 @@ export default {
       // https://blog.csdn.net/starter_____/article/details/79068894
       return res.json({
         data: {
-          user: user.toAuthJSON()
+          user: user.toAuthJSON(true)
         },
       })
-    }).catch(err => {
-      // console.log(err)
-      next(err)
-    })
+    }).catch(next)
   },
+
+  // 登录
   login(req, res, next) {
     const { email, password } = req.body
 
@@ -112,21 +54,21 @@ export default {
       })
     }
 
-    passport.authenticate('local', {session: false}, function (err, user, info) {
+    passport.authenticate('local', { session: false }, function (err, user, info) {
       if (err) return next(err)
 
       if (user) {
-        if (user.deleted) return res.sendStatus(404)
-
         user.token = user.generateJWT()
         return res.json({
-          data: user.toAuthJSON()
+          data: user.toAuthJSON(true),
         })
       } else {
         return res.status(422).json(info)
       }
     })(req, res, next)
   },
+
+  // 注销登录
   logout(req, res, next) {
     // 采用 token 认证，退出登录实现
     // - 纯前端实现，删除 localStorage 中的 token 即可
@@ -148,24 +90,101 @@ export default {
     // })
   },
 
-  update(req, res, next) {
+  // 返回用户列表
+  getList(req, res, next) {
+    // 允许的查询条件
+    const { username, email } = req.body
+    let {
+      pageNum = 1,
+      pageLimit = pageLimitDefault,
+    } = req.body
+
+    pageNum = Number(pageNum)
+    pageLimit = Number(pageLimit)
+
+    const query = { }
+    if (username) query.username = username
+    if (email) query.email = email
+    const offset = (pageNum - 1) * pageLimit
+
+    // https://mongoosejs.com/docs/queries.html
+    Promise.all([
+      User.find(query)
+        // .where('deleted').equals(true) // 使用 mongoose-delete
+        .limit(pageLimit)
+        .skip(offset)
+        .exec(),
+      User.countDocuments(query)
+    ]).then(([data, count]) => {
+      res.json({
+        data: {
+          list: data.map(item => item.toAuthJSON()),
+          total_count: count,
+          page_num: pageNum,
+          page_limit: pageLimit,
+          total_page: Math.ceil(count / pageLimit),
+          // has_more: Math.ceil(count / pageLimit) > pageNum,
+        },
+        // errno: 0, // 默认即成功
+        // errmsg: 'success',
+        logid: '',
+        timestamp: Date.now(),
+      })
+    }).catch(next)
+  },
+
+  // 返回用户信息
+  getOne(req, res, next) {
     const {
       id,
-      password,
-      ...rest
+      username,
+      email,
     } = req.body
-    const { payload } = req
+    // req.body 默认为 {}, req.payload 默认为 undefined
+    const authId = req.payload && req.payload.id
+
+    function getone() {
+      if (id) {
+        return User.findById(id)
+      } else {
+        const query = {}
+        if (username) query.username = username
+        if (email) query.email = email
+        return User.findOne(query)
+      }
+    }
+
+    getone().then(data => {
+      if (!data) return res.sendStatus(404)
+
+      res.json({
+        // TODO: 这里不应该得到 token(只在 login以及更新用户信息后 返回)，而是返回用户基本信息
+        // 判断是否包含非公开信息
+        // data: authId === data.id ? data.toProfileJSON() : data.toPublicJSON(),
+        data: data.toAuthJSON(authId === data.id),
+        // errno: 0, // 默认即成功
+        // errmsg: 'success',
+        logid: '',
+        timestamp: Date.now(),
+      })
+    })
+  },
+
+  // 更新用户信息
+  update(req, res, next) {
+    const { id, password, ...rest } = req.body
+    const authId = req.payload && req.payload.id
 
     if (!id) return res.send({
-      error: `user id is necessary`
+      errno: 404100,
+      errmsg: `query params id is necessary`,
     })
 
-    // console.log(req.payload)
-    if (payload.id !== id) return res.sendStatus(401)
+    if (authId !== id) return res.sendStatus(401)
 
     User.findById(id).then(data => {
       if (!data) return res.sendStatus(401)
-      if (data.deleted) return res.sendStatus(404)
+      // if (data.deleted) return res.sendStatus(404)
 
       // only update fields that were actually passed...
       // 接受修改的字段 filter
@@ -184,26 +203,28 @@ export default {
       })
     }).catch(next)
   },
-  delete(req, res, next) {
-    const { id } = req.body
 
-    if (!id) return res.send({
+  // 删除用户
+  delete(req, res, next) {
+    // 必先校验用户
+    const userId = req.body.id
+    const authId = req.payload && req.payload.id
+
+    if (!userId) return res.send({
       errno: 404100,
       errmsg: `data id is necessary`,
     })
 
-    User.findById(id).then(data => {
-      if (!data || data.deleted) return res.sendStatus(404)
+    // 校验 auth 权限
+    if (authId !== userId) return res.sendStatus(401)
+    User.findById(authId).then(data => {
+      if (!data) return res.sendStatus(404)
 
-      data.deleted = true
-
-      return data.save().then(function(){
+      return data.delete(authId).then(function(){
         return res.json({
+          data: data.toPublicJSON(),
           errno: 0,
           errmsg: '删除成功',
-          data: {
-            id: data.toJSON(),
-          },
         })
       })
     })

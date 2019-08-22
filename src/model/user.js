@@ -2,15 +2,17 @@ import mongoose from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
+import softDelete from 'mongoose-delete'
+// import BaseModel  from './base.model'
 import config from '../config'
 
 const { secret } = config.session
-// const BaseModel = require('./base_model');
 
 const { Schema } = mongoose
 const { ObjectId } = Schema.Types
 
 const UserSchema = new Schema({
+  // 六位自增 100000 可以使用 findAndModify(原子操作)来保证序列唯一(某个表存id，取此数据无则新建，有则 +1 $inc)
   // user_id: { type: String, required: true },
   username: {
     type: String,
@@ -53,7 +55,7 @@ const UserSchema = new Schema({
   update_at: { type: Date, default: Date.now },
 })
 
-// UserSchema.plugin(BaseModel);
+UserSchema.plugin(softDelete, { indexFields: 'all', overrideMethods: 'all' })
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' })
 
 UserSchema.methods.verifyPassword = function(password) {
@@ -89,37 +91,27 @@ UserSchema.methods.generateJWT = function() {
   // })
 }
 
-UserSchema.methods.toAuthJSON = function() {
-  return {
+UserSchema.methods.toAuthJSON = function(authorized) {
+  const user = {
     id: this._id,
     username: this.username,
     email: this.email,
     bio: this.bio,
     avatar: this.avatar,
-    deleted: this.deleted,
-    token: this.generateJWT(),
+    // deleted: this.deleted,
   }
-}
-
-UserSchema.methods.toJSON = function() {
-  return {
-    id: this._id,
-    username: this.username,
-    email: this.email,
-    bio: this.bio,
-    avatar: this.avatar,
-    deleted: this.deleted,
+  if (authorized) {
+    user.token = this.generateJWT()
   }
+  return user
 }
 
 UserSchema.methods.toProfileJSONFor = function(user) {
   return {
+    email: this.email,
     username: this.username,
     bio: this.bio,
-    avatar:
-      this.avatar ||
-      'https://static.productionready.io/images/smiley-cyrus.jpg',
-    // following: user ? user.isFollowing(this._id) : false
+    avatar: this.avatar || '/img/avatar-default.jpg',
   }
 }
 
