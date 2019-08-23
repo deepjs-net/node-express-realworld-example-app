@@ -220,6 +220,7 @@ export default {
     User.findById(authId).then(data => {
       if (!data) return res.sendStatus(404)
 
+      // deleteById
       return data.delete(authId).then(function(){
         return res.json({
           data: data.toPublicJSON(),

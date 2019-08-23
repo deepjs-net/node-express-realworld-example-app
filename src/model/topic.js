@@ -17,7 +17,7 @@ const TopicSchema = new Schema({
   desc: { type: String },
   content: { type: String },
   author: { type: ObjectId, ref: 'User' },
-  // tags: [{ type: ObjectId, ref: 'Tag' }],
+  tags: [{ type: ObjectId, ref: 'Tag' }],
   // comments: [{ type: ObjectId, ref: 'Comment' }],
   // top: { type: Boolean, default: false }, // 置顶帖
   // good: {type: Boolean, default: false}, // 精华帖
@@ -26,8 +26,10 @@ const TopicSchema = new Schema({
   //   view_count: { type: Number, default: 0 },
   //   like_count: { type: Number, default: 0 },
   deleted: { type: Boolean, default: false },
-  create_at: { type: Date, default: Date.now },
-  update_at: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
+}, {
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
 
 TopicSchema.plugin(softDelete, { indexFields: 'all', overrideMethods: 'all' })

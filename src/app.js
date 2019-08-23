@@ -2,7 +2,6 @@ import path from 'path'
 import express from 'express'
 import session from 'express-session'
 // import ConnectStore from 'connect-mongo'
-// import csurf from 'csurf'
 import cors from 'cors'
 // import flash from 'connect-flash'
 import bodyParser from 'body-parser'
@@ -60,16 +59,6 @@ app.use(passport.initialize())
 // https://stackoverflow.com/questions/22052258/what-does-passport-session-middleware-do
 app.use(passport.session()) // 相当于 passport.authenticate('session');
 
-// CSRF 防护(CSRF中间件初始化) https://www.npmjs.com/package/csurf
-// Prohibits express.csrf() middleware before express.methodOverride().
-// https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html
-// https://zhuanlan.zhihu.com/p/22521378
-// app.use(csurf({ cookie: true }))
-
-// app.all('*', function (req, res) {
-//   res.cookie('XSRF-TOKEN', req.csrfToken())
-//   // res.render('index')
-// })
 // router 放在 错误请求日志之前 成功日志之后
 app.use('/api', cors(), apiRouter)
 // app.use('/', webRouter)

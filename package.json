@@ -47,7 +47,6 @@
     "connect-mongo": "^3.0.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "csurf": "^1.10.0",
     "ejs-mate": "^3.0.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",

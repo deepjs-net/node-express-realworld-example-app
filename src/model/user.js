@@ -30,11 +30,14 @@ const UserSchema = new Schema({
     match: [/\S+@\S+\.\S+/, 'is invalid'],
     index: true,
   },
-  hash: String,
-  salt: String,
-  deleted: { type: Boolean, default: false },
   bio: String, // Short bio about you
   avatar: String,
+  salt: String,
+  hash: String,
+
+  all_comment: [],
+  all_reply: [],
+  // deleted: { type: Boolean, default: false },
   // email: { type: String},
   // favorites: [{
   //   type: ObjectId,
@@ -53,6 +56,11 @@ const UserSchema = new Schema({
   // status: String,
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now },
+}, {
+  // https://www.cnblogs.com/jaxu/p/5595451.html
+  // https://mongoosejs.com/docs/guide.html#timestamps
+  // timestamps: true,
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
 
 UserSchema.plugin(softDelete, { indexFields: 'all', overrideMethods: 'all' })
@@ -75,7 +83,7 @@ UserSchema.methods.setPassword = function(password) {
 UserSchema.methods.generateJWT = function() {
   const today = new Date()
   const exp = new Date(today)
-  exp.setDate(today.getDate() + 60) // 时效 60天
+  exp.setDate(today.getDate() + 30) // 时效 60天
 
   return jwt.sign(
     {
@@ -121,10 +129,10 @@ UserSchema.index({ email: 1 }, { unique: true })
 // UserSchema.index({githubId: 1});
 // UserSchema.index({accessToken: 1});
 
-UserSchema.pre('save', function(next) {
-  const now = new Date()
-  this.update_at = now
-  next()
-})
+// UserSchema.pre('save', function(next) {
+//   const now = new Date()
+//   this.update_at = now
+//   next()
+// })
 
 export const User = mongoose.model('User', UserSchema)

@@ -3,7 +3,7 @@
  * http://mongoosejs.com/docs/plugins.html
  */
 
-import util from '../../util'
+import util from '../../utils'
 
 export default function(schema) {
   schema.methods.create_at_ago = function() {

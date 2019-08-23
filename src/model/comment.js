@@ -4,15 +4,13 @@ import uniqueValidator from 'mongoose-unique-validator'
 const { Schema } = mongoose
 const { ObjectId } = Schema.Types
 
-const TagSchema = new Schema({
+const CommentSchema = new Schema({
   content: [
     type: String,
     required: [true, `can't be blank`],
-    index: true,
   ],
-  // alias: [{ type: ObjectId, ref: 'Tag' }],
   author: { type: ObjectId, ref: 'User' },
-  topics: [{ type: ObjectId, ref: 'Topic' }],
+  topics: { type: ObjectId, ref: 'Topic' },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
 }, {
@@ -23,9 +21,9 @@ CommentSchema.methods.toJSONFor = function(user) {
   return {
     id: this._id,
     content: this.content,
-    // created_at: this.created_at,
-    // author: this.author.toProfileJSONFor(user),
+    created_at: this.created_at,
+    author: this.author.toProfileJSONFor(user),
   }
 }
 
-export const Tag = mongoose.model('Tag', TagSchema)
+export const Comment = mongoose.model('Comment', CommentSchema)

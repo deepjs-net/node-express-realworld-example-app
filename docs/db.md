@@ -54,6 +54,33 @@ https://api.github.com/users/cloudyan
 - comment_id
 - comment
 
+Models 之间的关系
+
+博客系统设计
+
+- one user
+  - many post
+- one post
+  - one author
+  - many tag
+- one tag
+  - many post
+- 收藏、关注
+
+评论系统设计
+
+- user
+  - many comment
+  - many reply_to
+- post
+  - many comment
+- comment
+  - one post
+  - one user
+  - ?one replay_to
+
+常用表设计
+
 - 系统表（S_）：System，系统配置相关的基本信息表。系统用户表（S_USER）、系统角色表（S_ROLE）、系统菜单（S_LINK_MENU）、操作日志（S_OPERATION_LOG）、登录日志（S_LOGIN_LOG）、系统字典（S_DICTIONARY）、系统字典类型（S_DICTIONARY_TYPE）等。
 - 字典表（D_）：Dictionary，非系统字典外的字典表。在“设计规范”——“相关注释”——“字典字段”中提到过字典表的定义，除了数据库中的通用字典表，还有一些常见表，比如地区表（D_REGION）、ICD编码（D_ICD）等，也是一种字典表，这里的D_前缀即加在这类字典表名前面。
 - 中间表（R_）：Relationship，多对多关系中间表。具体命名方式建议为：R_主表名_从表名，在多对多关系中其实不分主从表，这里我们规定核心表为主表，另外一个为从表。比如用户角色关系中，用户表（S_USER）为主、角色（S_ROLE）表为从，那中间表就命名为R_USER_ROLE。当中间表名超长时，则根据实际情况缩写主从表名，建议优先缩写从表表名。
@@ -67,6 +94,8 @@ https://api.github.com/users/cloudyan
   - https://www.runoob.com/mongodb/mongodb-database-references.html
   - https://mongoosejs.com/docs/populate.html
   - https://segmentfault.com/a/1190000002727265
+  - https://www.cnblogs.com/jaxu/p/5595451.html
+  - https://mongoosejs.com/docs/guide.html#timestamps
 
 扩展阅读
 
