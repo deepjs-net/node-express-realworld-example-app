@@ -48,7 +48,7 @@ export default {
   getList(req, res, next) {
     // 允许的查询条件
     const query = {}
-    const { keyword, author } = req.body
+    const { author } = req.body
     const authId = req.payload && req.payload.id
 
     Promise.all([
