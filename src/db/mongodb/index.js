@@ -1,10 +1,12 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 // const config = require('../config')
-mongoose.connect('mongodb://username:password@ip:port/n_log', {
+
+mongoose.connect('mongodb://username:password@ip:port/nblog', {
   userMongoClient: true,
 })
 
-let db = mongoose.connection
+const db = mongoose.connection
+
 db.on('connected', function() {
   console.log('connected!!!')
 })

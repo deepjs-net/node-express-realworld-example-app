@@ -13,7 +13,7 @@
 
 const objProto = Object.prototype
 const owns = objProto.hasOwnProperty
-const toString = objProto.toString
+const { toString } = objProto
 
 // 对象自身属性中是否具有指定的属性
 export function hasOwn(obj, prop) {
@@ -32,7 +32,7 @@ export function isNumber(v) {
   return toString.call(v) === '[object Number]'
 }
 export function isInteger(v) {
-  return isNumber(v) && parseInt(v) === v
+  return isNumber(v) && parseInt(v, 10) === v
 }
 
 export function isString(v) {
@@ -48,11 +48,11 @@ export function isObject(v) {
 }
 
 export function isFunction(v) {
-  var isAlert = typeof window !== 'undefined' && v === window.alert
-  if (isAlert) {
-    return true
-  }
-  var str = toString.call(v)
+  // var isAlert = typeof window !== 'undefined' && v === window.alert
+  // if (isAlert) {
+  //   return true
+  // }
+  const str = toString.call(v)
   return (
     str === '[object Function]' ||
     str === '[object GeneratorFunction]' ||

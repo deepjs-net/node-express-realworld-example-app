@@ -18,12 +18,13 @@ function getTokenFromHeader(req) {
 }
 
 export default {
+  // 什么作用，都做了什么
   required: jwt({
     secret,
     userProperty: 'payload',
     getToken: getTokenFromHeader,
   }).unless({
-    path: ['/api/user/login', '/api/user/register'],
+    path: [], // '/api/user/login', '/api/user/create'],
   }),
   optional: jwt({
     secret,

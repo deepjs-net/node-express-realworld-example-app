@@ -1,5 +1,8 @@
 # node-express-realworld-example-app
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0e76d3a4093940f5b7d4ed47bb4e9ec4)](https://www.codacy.com/app/deepjs-net/node-express-realworld-example-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=deepjs-net/node-express-realworld-example-app&amp;utm_campaign=Badge_Grade)
+[![DeepScan grade](https://deepscan.io/api/teams/5071/projects/6967/branches/62505/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=5071&pid=6967&bid=62505)
+
 使用 Express + MongoDB 搭建多人博客
 
 Example Node (Express + Mongoose) codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the RealWorld API spec.
@@ -66,7 +69,7 @@ pm2 delete 0
 ├── README.md
 ├── api/              # 编写业务逻辑层，并暴露 openApi
 ├── config/           # 配置
-├── controller/       # 解析用户的输入，处理后返回相应的结果
+├── controller/       # 解析用户的输入，处理后返回相应的结果(废弃)
 ├── db/               # 数据库连接操作
 ├── docs/
 ├── logs/
@@ -74,8 +77,8 @@ pm2 delete 0
 ├── model/            # 操作数据库的方法
 ├── public/           # 静态资源
 ├── schedule/         # 定时任务
-├── view/             # 放置模板文件
-├── web_router.js     # 配置 URL 路由规则
+├──   view/             # 放置模板文件(废弃，改为前后端分离)
+├──   web_router.js     # 配置 URL 路由规则(废弃)
 ├── api_router.js     # 配置 Api 路由规则
 └── app.js            # 自定义启动时的初始化工作
 ```
@@ -117,6 +120,8 @@ pm2 delete 0
 - https://www.w3cschool.cn/minicourse/play/springbootrm
 - https://github.com/JeffLi1993/springboot-learning-example
 - https://www.w3cschool.cn/wkspring/
+
+大纲
 
 - 基础 - 入门篇
 - 基础 - Web 业务开发篇

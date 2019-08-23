@@ -1,26 +1,27 @@
 {
   "name": "@deepjs/nblog",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "使用 Express + MongoDB 搭建多人博客",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "build": "npx babel src --out-dir dist",
     "build:watch": "npx babel src --watch --out-dir dist --ignore view",
-    "start": "cross-env NODE_ENV=production pm2 start ./dist/app.js --name nblog",
-    "stop": "cross-env NODE_ENV=production pm2 stop nblog",
+    "start": "cross-env NODE_ENV=production pm2 start ./dist/app.js --name nblog --node-args='--inspect'",
+    "stop": "pm2 stop nblog",
     "restart": "npm run stop && npm run start",
-    "dev1": "pm2 start ./dist/app.js --node-args='--inspect' --watch",
+    "dev1": "pm2 restart ./dist/app.js --watch dist --name='nblog'",
     "dev2": "cross-env NODE_ENV=production node --inspect=127.0.0.1:9229 ./dist/app.js",
     "dev3": "node --inspect ./dist/app.js",
     "srart2": "pm2 start ./src/app.js --interpreter ./node_modules/@babel/node/bin/babel-node.js",
-    "dev": "npx babel-node --inspect ./src/app.js",
-    "dev0": "npm run build:watch && npm run dev1",
+    "watch": "babel-watch src/app.js -w",
+    "dd": "npx babel-node --inspect ./src/app.js",
+    "dev": "npm run dev1 && npm run build:watch",
     "stop1": "pm2 delete 0 --watch",
     "lint": "eslint './src/**/*.js'",
-    "test": "node ./temp/index.js"
+    "test": "node ./temp/test.js"
   },
   "repository": {
     "type": "git",
@@ -55,14 +56,19 @@
     "jsonwebtoken": "^8.5.1",
     "log4js": "^5.0.0",
     "mongoose": "^5.6.9",
+    "mongoose-delete": "^0.5.0",
     "mongoose-unique-validator": "^2.0.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "slug": "^1.1.0",
+    "translation.js": "^0.7.9",
+    "transliteration": "^2.1.5",
     "winston": "^3.2.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
+    "babel-watch": "^7.0.0",
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.0.0",

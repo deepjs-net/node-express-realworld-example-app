@@ -32,15 +32,15 @@ const mdb = mongoose.connection
 
 // 连接成功
 mdb.on('connected', res => {
-  console.log('Mongoose connection open to ' + DB_URL)
+  console.log('Mongoose connection open to ' + DB_URL, res)
 })
 mdb.on('disconnected', res => {
-  console.log('Mongoose connection disconnected')
+  console.log('Mongoose connection disconnected', res)
 })
 
 // 连接异常
 mdb.on('error', err => {
-  console.log('Mongoose connection error: ' + err)
+  console.log('Mongoose connection error:', err)
 })
 
 mdb.once('open', function() {

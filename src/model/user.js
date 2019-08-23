@@ -2,15 +2,17 @@ import mongoose from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
+import softDelete from 'mongoose-delete'
+// import BaseModel  from './base.model'
 import config from '../config'
 
 const { secret } = config.session
-// const BaseModel = require('./base_model');
 
 const { Schema } = mongoose
-const { ObjectId } = Schema.Types
+// const { ObjectId } = Schema.Types
 
 const UserSchema = new Schema({
+  // 六位自增 100000 可以使用 findAndModify(原子操作)来保证序列唯一(某个表存id，取此数据无则新建，有则 +1 $inc)
   // user_id: { type: String, required: true },
   username: {
     type: String,
@@ -28,11 +30,14 @@ const UserSchema = new Schema({
     match: [/\S+@\S+\.\S+/, 'is invalid'],
     index: true,
   },
-  hash: String,
-  salt: String,
-  deleted: { type: Boolean, default: false },
   bio: String, // Short bio about you
   avatar: String,
+  salt: String,
+  hash: String,
+
+  all_comment: [],
+  all_reply: [],
+  // deleted: { type: Boolean, default: false },
   // email: { type: String},
   // favorites: [{
   //   type: ObjectId,
@@ -49,11 +54,16 @@ const UserSchema = new Schema({
   // level: { type: String },
   // active: { type: Boolean, default: false },
   // status: String,
-  create_at: { type: Date, default: Date.now },
-  update_at: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now, index: true },
+  updated_at: { type: Date, default: Date.now },
+}, {
+  // https://www.cnblogs.com/jaxu/p/5595451.html
+  // https://mongoosejs.com/docs/guide.html#timestamps
+  // timestamps: true,
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
 
-// UserSchema.plugin(BaseModel);
+UserSchema.plugin(softDelete, { indexFields: 'all', overrideMethods: 'all' })
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' })
 
 UserSchema.methods.verifyPassword = function(password) {
@@ -73,7 +83,7 @@ UserSchema.methods.setPassword = function(password) {
 UserSchema.methods.generateJWT = function() {
   const today = new Date()
   const exp = new Date(today)
-  exp.setDate(today.getDate() + 60) // 时效 60天
+  exp.setDate(today.getDate() + 30) // 时效 60天
 
   return jwt.sign(
     {
@@ -89,36 +99,27 @@ UserSchema.methods.generateJWT = function() {
   // })
 }
 
-UserSchema.methods.toAuthJSON = function() {
-  return {
+UserSchema.methods.toAuthJSON = function(authorized) {
+  const user = {
     id: this._id,
     username: this.username,
     email: this.email,
     bio: this.bio,
     avatar: this.avatar,
-    deleted: this.deleted,
-    token: this.generateJWT(),
+    // deleted: this.deleted,
   }
-}
-
-UserSchema.methods.toJSON = function() {
-  return {
-    id: this._id,
-    username: this.username,
-    email: this.email,
-    bio: this.bio,
-    avatar: this.avatar,
-    deleted: this.deleted,
+  if (authorized) {
+    user.token = this.generateJWT()
   }
+  return user
 }
 
 UserSchema.methods.toProfileJSONFor = function(user) {
   return {
+    email: this.email,
     username: this.username,
     bio: this.bio,
-    avatar:
-      this.avatar ||
-      'https://static.productionready.io/images/smiley-cyrus.jpg',
+    avatar: this.avatar || '/img/avatar-default.jpg',
     // following: user ? user.isFollowing(this._id) : false
   }
 }
@@ -129,10 +130,10 @@ UserSchema.index({ email: 1 }, { unique: true })
 // UserSchema.index({githubId: 1});
 // UserSchema.index({accessToken: 1});
 
-UserSchema.pre('save', function(next) {
-  const now = new Date()
-  this.update_at = now
-  next()
-})
+// UserSchema.pre('save', function(next) {
+//   const now = new Date()
+//   this.update_at = now
+//   next()
+// })
 
 export const User = mongoose.model('User', UserSchema)
