@@ -1,6 +1,7 @@
 # node-express-realworld-example-app
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0e76d3a4093940f5b7d4ed47bb4e9ec4)](https://www.codacy.com/app/deepjs-net/node-express-realworld-example-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=deepjs-net/node-express-realworld-example-app&amp;utm_campaign=Badge_Grade)
+[![DeepScan grade](https://deepscan.io/api/teams/5071/projects/6967/branches/62505/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=5071&pid=6967&bid=62505)
 
 使用 Express + MongoDB 搭建多人博客
 
