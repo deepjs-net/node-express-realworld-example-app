@@ -72,9 +72,9 @@ TopicSchema.methods.toJSONFor = function(user) {
 }
 
 TopicSchema.plugin(softDelete)
-TopicSchema.index({ create_at: -1 })
+TopicSchema.index({ created_at: -1 })
 // TopicSchema.index({top: -1, last_reply_at: -1});
-TopicSchema.index({ author: 1, create_at: -1 })
+TopicSchema.index({ author: 1, created_at: -1 })
 
 // TopicSchema.virtual('tabName').get(function () {
 //   const tab  = this.tab;

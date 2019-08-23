@@ -54,8 +54,8 @@ const UserSchema = new Schema({
   // level: { type: String },
   // active: { type: Boolean, default: false },
   // status: String,
-  create_at: { type: Date, default: Date.now },
-  update_at: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now, index: true },
+  updated_at: { type: Date, default: Date.now },
 }, {
   // https://www.cnblogs.com/jaxu/p/5595451.html
   // https://mongoosejs.com/docs/guide.html#timestamps
