@@ -32,7 +32,7 @@ export function isNumber(v) {
   return toString.call(v) === '[object Number]'
 }
 export function isInteger(v) {
-  return isNumber(v) && parseInt(v) === v
+  return isNumber(v) && parseInt(v, 10) === v
 }
 
 export function isString(v) {
@@ -48,10 +48,10 @@ export function isObject(v) {
 }
 
 export function isFunction(v) {
-  var isAlert = typeof window !== 'undefined' && v === window.alert
-  if (isAlert) {
-    return true
-  }
+  // var isAlert = typeof window !== 'undefined' && v === window.alert
+  // if (isAlert) {
+  //   return true
+  // }
   var str = toString.call(v)
   return (
     str === '[object Function]' ||
