@@ -1,11 +1,10 @@
 import mongoose from 'mongoose'
-import uniqueValidator from 'mongoose-unique-validator'
 
 const { Schema } = mongoose
 const { ObjectId } = Schema.Types
 
 const CommentSchema = new Schema({
-  content: {
+  body: {
     type: String,
     required: [true, `can't be blank`],
   },
@@ -20,7 +19,7 @@ const CommentSchema = new Schema({
 CommentSchema.methods.toJSONFor = function(user) {
   return {
     id: this._id,
-    content: this.content,
+    body: this.body,
     created_at: this.created_at,
     author: this.author.toProfileJSONFor(user),
   }

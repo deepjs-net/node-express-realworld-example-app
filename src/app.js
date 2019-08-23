@@ -17,7 +17,7 @@ import apiRouter from './api_router'
 // import webRouter from './web_router'
 
 const app = express()
-const argument = process.argv
+// const argument = process.argv
 // const MongoStore = ConnectStore(session);
 
 app.proxy = true
@@ -72,6 +72,7 @@ app.use('/api', cors(), apiRouter)
 // error handler
 if (config.debug) {
   app.use(errorhandler())
+  // TODO: 这里是所有路由之后，进行的 next，进行兜底错误处理
   app.use(function (err, req, res, next) {
     console.log(err.stack)
     res.status(err.status || 500)

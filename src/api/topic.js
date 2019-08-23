@@ -1,5 +1,5 @@
 import { Topic, User } from '../model'
-import { isUnDef, compactObject, filterObject } from '../utils'
+import { filterObject } from '../utils'
 import { pageLimitDefault } from './config'
 
 export default {
@@ -48,7 +48,7 @@ export default {
   getList(req, res, next) {
     // 允许的查询条件
     const query = {}
-    const { keyword, tags, author, favorited } = req.body
+    const { keyword, author } = req.body
     const authId = req.payload && req.payload.id
 
     Promise.all([
@@ -73,10 +73,10 @@ export default {
           .exec(),
         Topic.countDocuments(query).exec(),
         authId ? User.findById(authId) : null,
-      ]).then(([data, count, authuser]) => {
+      ]).then(([data, count, authUser]) => {
         res.json({
           data: {
-            list: data.map(item => item.toJSONFor(authuser)),
+            list: data.map(item => item.toJSONFor(authUser)),
             total_count: count,
             page_num: pageNum,
             page_limit: pageLimit,
@@ -198,7 +198,7 @@ export default {
       }
 
       // only update fields that were actually passed...
-      Object.assign(topic, compactObject(rest, ['title', 'desc', 'content']))
+      Object.assign(topic, filterObject(rest, ['title', 'desc', 'content']))
 
       return topic.save().then((newTopic) => {
         return res.json({
@@ -230,6 +230,6 @@ export default {
       return req.topic.delete(authId).then(() => {
         return res.sendStatus(204)
       })
-    })
+    }).catch(next)
   },
 }

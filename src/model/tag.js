@@ -18,6 +18,8 @@ const TagSchema = new Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
 
+TagSchema.plugin(uniqueValidator, { message: 'is already taken.' })
+
 TagSchema.methods.toJSONFor = function(user) {
   return {
     id: this._id,

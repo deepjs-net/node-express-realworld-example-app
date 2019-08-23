@@ -127,7 +127,7 @@ module.exports = {
     //     ignoreRestSiblings: false,
     //   },
     // ],
-    'no-unused-vars': 'off',
+    'no-unused-vars': 'warn',
     'no-use-before-define': 'off',
     'no-useless-escape': 'off',
     'prefer-template': 'off',

@@ -190,8 +190,8 @@ export default {
       // 接受修改的字段 filter
       // 这里做过滤，无效的删除，非白名单的删除
       const whiteList = ['username', 'email', 'bio', 'avatar']
-      const securityData = filterObject(rest, whiteList)
-      Object.assign(data, compactObject(rest, [undefined]))
+      const temp = filterObject(rest, whiteList)
+      Object.assign(data, compactObject(temp, [undefined]))
       if (isUnDef(password)) {
         data.setPassword(password)
       }

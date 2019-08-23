@@ -4,7 +4,6 @@ import softDelete from 'mongoose-delete'
 // import { slugify } from 'transliteration'
 import { google } from 'translation.js'
 import slug from 'slug'
-import config from '../config'
 
 const { Schema } = mongoose
 const { ObjectId } = Schema.Types
