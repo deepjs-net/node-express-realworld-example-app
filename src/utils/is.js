@@ -13,7 +13,7 @@
 
 const objProto = Object.prototype
 const owns = objProto.hasOwnProperty
-const toString = objProto.toString
+const { toString } = objProto
 
 // 对象自身属性中是否具有指定的属性
 export function hasOwn(obj, prop) {
@@ -52,7 +52,7 @@ export function isFunction(v) {
   // if (isAlert) {
   //   return true
   // }
-  var str = toString.call(v)
+  const str = toString.call(v)
   return (
     str === '[object Function]' ||
     str === '[object GeneratorFunction]' ||

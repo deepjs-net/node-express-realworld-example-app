@@ -5,10 +5,10 @@ const { Schema } = mongoose
 const { ObjectId } = Schema.Types
 
 const CommentSchema = new Schema({
-  content: [
+  content: {
     type: String,
     required: [true, `can't be blank`],
-  ],
+  },
   author: { type: ObjectId, ref: 'User' },
   topics: { type: ObjectId, ref: 'Topic' },
   created_at: { type: Date, default: Date.now },

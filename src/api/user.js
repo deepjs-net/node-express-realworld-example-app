@@ -73,7 +73,7 @@ export default {
     // 采用 token 认证，退出登录实现
     // - 纯前端实现，删除 localStorage 中的 token 即可
     // - 服务端实现，重置或清空 token（此 token 会保存在缓存或数据库中）
-    const { id } = req.body
+    // const { id } = req.body
     return res.json({
       code: 1,
       codeText: '可以纯前端实现',
