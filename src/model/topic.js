@@ -14,10 +14,10 @@ const { ObjectId } = Schema.Types
 const TopicSchema = new Schema({
   title: { type: String },
   desc: { type: String },
-  content: { type: String },
+  body: { type: String },
   author: { type: ObjectId, ref: 'User' },
   tags: [{ type: ObjectId, ref: 'Tag' }],
-  // comments: [{ type: ObjectId, ref: 'Comment' }],
+  comments: [{ type: ObjectId, ref: 'Comment' }],
   // top: { type: Boolean, default: false }, // 置顶帖
   // good: {type: Boolean, default: false}, // 精华帖
   // lock: {type: Boolean, default: false}, // 被锁定主题
@@ -46,16 +46,23 @@ TopicSchema.pre('validate', async function(next){
 
 TopicSchema.methods.slugify = async function() {
   // https://www.npmjs.com/package/translation.js
+  // TODO: 需要特殊处理如+号等
   const translate = await google.translate({
-    text: this.title,
+    text: this.title, //.replace(/\+/, ''),
     from: 'zh-CN',
     to: 'en',
   })
   // const translate = { result: [ 'title' ] }
   // console.log(translate)
+  const result = translate.result.join( ).toLowerCase()
   /* eslint no-bitwise: 0 */
-  this.slug = slug(translate.result.join( ).toLowerCase()) + '-' + (Math.random() * (36 ** 6) | 0).toString(36)
+  this.slug = slug(result) + '-' + (Math.random() * (36 ** 6) | 0).toString(36)
 }
+
+// TopicSchema.methods.updateFavoriteCount = function() {
+//   const { topic } = this
+//   return User.count({})
+// }
 
 TopicSchema.methods.toJSONFor = function(user) {
   return {
@@ -63,7 +70,7 @@ TopicSchema.methods.toJSONFor = function(user) {
     slug: this.slug,
     title: this.title,
     desc: this.desc,
-    content: this.content,
+    body: this.body,
     author: this.author.toProfileJSONFor(user),
     create_at: this.create_at,
     update_at: this.update_at,

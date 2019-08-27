@@ -70,8 +70,8 @@ header 头设置
   - `GET /comment/list`     comment.getList
   - `GET /comment/info`     comment.getOne
   - `GET /comment/rawinfo`  comment.getRawOne
-  - `POST /comment/update`  comment.update
   - `POST /comment/delete`  comment.delete
+- 收藏&关注
 
 ### api 增强
 
@@ -172,6 +172,8 @@ header 头设置
 - `POST /tag/delete`      tag.delete
 
 ### comment 评论
+
+评论不需要单独的用户所有评论的列表，问答类才需要，并且评论和问答是两张表
 
 - `POST /comment/create`  comment.create
 - `GET /comment/info`     comment.getOne

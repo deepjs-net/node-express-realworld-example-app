@@ -17,8 +17,8 @@
     "dev3": "node --inspect ./dist/app.js",
     "srart2": "pm2 start ./src/app.js --interpreter ./node_modules/@babel/node/bin/babel-node.js",
     "watch": "babel-watch src/app.js -w",
-    "dd": "npx babel-node --inspect ./src/app.js",
-    "dev": "npm run dev1 && npm run build:watch",
+    "dev": "npx babel-node --inspect ./src/app.js",
+    "dd": "npm run dev1 && npm run build:watch",
     "stop1": "pm2 delete 0 --watch",
     "lint": "eslint './src/**/*.js'",
     "test": "node ./temp/test.js"

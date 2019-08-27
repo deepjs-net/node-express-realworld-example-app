@@ -9,7 +9,7 @@ const CommentSchema = new Schema({
     required: [true, `can't be blank`],
   },
   author: { type: ObjectId, ref: 'User' },
-  topics: { type: ObjectId, ref: 'Topic' },
+  topic: { type: ObjectId, ref: 'Topic' },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
 }, {
@@ -20,8 +20,8 @@ CommentSchema.methods.toJSONFor = function(user) {
   return {
     id: this._id,
     body: this.body,
-    created_at: this.created_at,
     author: this.author.toProfileJSONFor(user),
+    created_at: this.created_at,
   }
 }
 

@@ -5,6 +5,7 @@ import { pageLimitDefault } from './config'
 export default {
   // 公共方法
   common(req, res, next) {
+    // 要支持 slug 搜索，这个再 url 表现上体验更好
     const { id, ...rest } = req.body
     // const authId = req.payload && req.payload.id
 
@@ -154,6 +155,7 @@ export default {
       req.payload ? User.findById(authId) : null,
       // execPopulate 填充多个不同的查询
       // https://codeday.me/bug/20171114/96273.html
+      // TODO: 这里不必须吧
       req.topic.populate('author').execPopulate(),
     ]).then(([ user ]) => {
       return res.json({
@@ -198,7 +200,7 @@ export default {
       }
 
       // only update fields that were actually passed...
-      Object.assign(topic, filterObject(rest, ['title', 'desc', 'content']))
+      Object.assign(topic, filterObject(rest, ['title', 'desc', 'body']))
 
       return topic.save().then((newTopic) => {
         return res.json({
@@ -222,7 +224,7 @@ export default {
     User.findById(authId).then(user => {
       if (!user) return res.sendStatus(401)
 
-      // 统一处理后，文章挂载在 req.topic 上
+      // 统一处理后，直接 req.topic 上取
       if (req.topic.author._id.toString() !== authId) {
         return res.sendStatus(403)
       }

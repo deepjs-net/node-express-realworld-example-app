@@ -16,35 +16,37 @@
 - 系统中所有逻辑型中数值0表示为“假”，数值1表示为“真”，datetime、smalldatetime类型的字段没有默认值，必须为NULL
 - 所有字段在设计时，除以下数据类型timestamp、image、datetime、smalldatetime、uniqueidentifier、binary、sql_variant、binary 、varbinary外，必须有默认值，字符型的默认值为一个空字符值串’’，数值型的默认值为数值0，逻辑型的默认值为数值0
 
-## user
+## user 用户
 
 https://api.github.com/users/cloudyan
 
 - user_id 用户id
 - username 用户名
 - email
-- hash
-- salt
-- deleted
-- avatar
-- create_at 创建时间 2011-07-13T14:07:57Z
-- update_at 更新时间 2019-07-22T14:29:51Z
 - bio 介绍
 - nickname 昵称
+- hash
+- salt
+- avatar
+- deleted
+- last_login 最后登录
+- created_at 创建时间 2011-07-13T14:07:57Z
+- updated_at 更新时间 2019-07-22T14:29:51Z
 
-## topic
+## topic 文章
 
 - title 标题
 - author 作者
 - desc 描述
-- content 正文
+- body 正文
+- TODO: slug 要存到数据库中
 - views_count 浏览数
 - likes_count 点赞数
-- comments_count 评论数
-- create_at 创建时间
-- update_at 更新时间
+- comments 评论
+- created_at 创建时间
+- updated_at 更新时间
 
-## tags
+## tags 标签
 
 - tag_id
 - tag
@@ -63,21 +65,20 @@ Models 之间的关系
 - one post
   - one author
   - many tag
+  - many comment
+- one comment
+  - one post
+  - one author
+  - one reply_to
 - one tag
   - many post
-- 收藏、关注
 
-评论系统设计
+扩展收藏与关注
 
 - user
-  - many comment
-  - many reply_to
-- post
-  - many comment
-- comment
-  - one post
-  - one user
-  - ?one replay_to
+  - many flowing_user
+  - many flowing_topic
+  - many flower
 
 常用表设计
 
