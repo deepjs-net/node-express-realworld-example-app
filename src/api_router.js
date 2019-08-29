@@ -4,6 +4,7 @@ import auth from './common/auth'
 import user from './api/user'
 import topic from './api/topic'
 import comment from './api/comment'
+import tag from './api/tag'
 
 const router = express.Router()
 
@@ -35,8 +36,15 @@ router.get('/comment/list', comment.getList)
 router.get('/comment/info', comment.common, comment.getOne)
 router.get('/comment/rawinfo', auth.required, comment.common, comment.getRawOne)
 router.post('/comment/create', auth.required, comment.create)
-// router.put('/comment/update', auth.required, comment.common, comment.update)
+// router.put('/comment/update', auth.required, comment.update)
 router.delete('/comment/delete', auth.required, comment.common, comment.delete)
+
+// 标签
+router.post('/tag/create', auth.required, tag.create)
+router.get('/tag/list', tag.getList)
+router.get('/tag/info', tag.getOne)
+router.put('/tag/update', auth.required, tag.update)
+router.delete('/tag/delete', auth.required, tag.delete)
 
 router.use(function(err, req, res, next) {
   if (err.name === 'ValidationError') {

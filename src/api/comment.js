@@ -81,10 +81,7 @@ export default {
             },
           },
         }),
-      Topic.findById(topicId),
-    ]).then(([user, topic, count]) => {
-      console.log(topic)
-      console.log(count)
+    ]).then(([user, topic]) => {
       res.json({
         data: {
           list: topic.comments.map(item => item.toJSONFor(user)),
@@ -153,7 +150,7 @@ export default {
         return res.sendStatus(403)
       }
 
-      return req.comment.delete(authId).then(() => {
+      return req.comment.remove().then(() => {
         return res.sendStatus(204)
       })
     }).catch(next)

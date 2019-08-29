@@ -65,3 +65,4 @@ yarn.lock
 temp
 lib
 dist/
+.scannerwork/
