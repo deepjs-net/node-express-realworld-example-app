@@ -1,21 +1,19 @@
-# Api 设计
-
-## API Spec
+# Api Spec
 
 使用 mongodb，数据库字段名可以直接使用小驼峰，避免无谓的格式转换，比如 userId, userName, pageLimit, pageNum, totalPage, totalCount
 
 这里我们暂时仍然使用 `_` 分割，返回数据全小写，query 参数全小驼峰格式
 
-### headers
+## headers
 
 header 头设置
 
 - `Content-Type: application/x-www-form-urlencoded`
 - `Authorization: Bearer {{token}}`
 
-### 接口数据结构
+## 接口数据结构
 
-- 参数统一使用 `query` 传递，不使用 `param`
+- ~~参数统一使用 `query` 传递，不使用 `param`~~
 - 返回数据都在 data 内，data 外为统一结构
   - 达成预期结果，错误码为 `errno: 0`
   - 产生非预期结果，返回对应的错误码 `errno: 'xxx'` 以及原因 `errmsg: 'xxx'`
