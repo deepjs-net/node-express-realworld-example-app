@@ -5,10 +5,9 @@ import { Comment, Topic, User } from '../model'
 export default {
   // 公共方法
   common(req, res, next) {
-    const { id } = req.body
     // const authId = req.payload && req.payload.id
 
-    Comment.findById(id).populate('author')
+    Comment.findById(req.body.id).populate('author')
       .then(data => {
         if (!data) return res.sendStatus(404)
 
