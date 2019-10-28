@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import softDelete from 'mongoose-delete'
-// import { slugify } from 'transliteration'
+// import { slugify } from 'transliteration' // 还有 google-translate-open-api 模块
 import { google } from 'translation.js'
 import slug from 'slug'
 
